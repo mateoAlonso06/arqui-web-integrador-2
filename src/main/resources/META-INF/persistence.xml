@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence xmlns="http://java.sun.com/xml/ns/persistence"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://java.sun.com/xml/ns/persistence
+             http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd"
+             version="2.0">
+
+    <persistence-unit name="arqui-web-i2" transaction-type="RESOURCE_LOCAL">
+        <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+
+        <!-- Listar explícitamente todas las entidades del proyecto -->
+        <class>org.integrador.entity.Estudiante</class>
+        <class>org.integrador.entity.Carrera</class>
+        <class>org.integrador.entity.EstudianteCarrera</class>
+
+        <!-- Excluir clases no listadas para evitar autodescubrimiento problemático -->
+        <exclude-unlisted-classes>true</exclude-unlisted-classes>
+
+        <properties>
+            <!-- Configuración de conexión a PostgreSQL 16 -->
+            <property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver"/>
+            <property name="javax.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/integrador_2"/>
+            <property name="javax.persistence.jdbc.user" value="mateo"/>
+            <property name="javax.persistence.jdbc.password" value="secret"/>
+
+            <!-- Configuración de Hibernate para PostgreSQL -->
+            <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect"/>
+
+            <!-- Estrategia de DDL: create-drop recrea las tablas en cada ejecución -->
+            <property name="hibernate.hbm2ddl.auto" value="update"/>
+
+            <!-- Logging de SQL para debugging -->
+            <property name="hibernate.show_sql" value="true"/>
+            <property name="hibernate.format_sql" value="true"/>
+            <property name="hibernate.use_sql_comments" value="true"/>
+
+            <!-- Configuración adicional de rendimiento -->
+            <property name="hibernate.connection.autocommit" value="false"/>
+            <property name="hibernate.jdbc.batch_size" value="20"/>
+            <property name="hibernate.order_inserts" value="true"/>
+            <property name="hibernate.order_updates" value="true"/>
+        </properties>
+    </persistence-unit>
+</persistence>
