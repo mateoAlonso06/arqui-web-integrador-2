@@ -3,6 +3,7 @@ package org.integrador.entity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.util.List;
@@ -10,16 +11,14 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
+@ToString
 @NoArgsConstructor
 public class Carrera {
     @Id
-    @GeneratedValue(strategy = javax.persistence.GenerationType.SEQUENCE)
     private Integer id;
 
-    @Column(unique = true)
     private String nombre;
 
-    @Column(unique = true)
     private Integer duracion;
 
     @OneToMany(mappedBy = "carrera")

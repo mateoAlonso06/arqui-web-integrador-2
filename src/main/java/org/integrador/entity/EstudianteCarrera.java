@@ -29,13 +29,14 @@ public class EstudianteCarrera {
     @Column(length = 4, nullable = false, columnDefinition = "INT DEFAULT 0")
     private Integer graduacion = 0;
 
-    // Getter calculado para antiguedad
-    public Integer getAntiguedad() {
-        if (this.graduacion != null && this.graduacion != 0) {
-            return this.graduacion - this.anioInscripcion;
-        } else {
-            int anioActual = java.time.Year.now().getValue();
-            return anioActual - this.anioInscripcion;
-        }
-    }
+    @Column(length = 4, nullable = false)
+    private Integer antiguedad;
+//    public Integer getAntiguedad() {
+//        if (this.graduacion != null && this.graduacion != 0) {
+//            return this.graduacion - this.anioInscripcion;
+//        } else {
+//            int anioActual = java.time.Year.now().getValue();
+//            return anioActual - this.anioInscripcion;
+//        }
+//    }
 }

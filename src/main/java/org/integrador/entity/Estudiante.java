@@ -13,10 +13,6 @@ import java.util.List;
 @NoArgsConstructor
 public class Estudiante {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private Integer id;
-
-    @Column(unique = true, nullable = false)
     private String dni;
 
     @Column(nullable = false)
