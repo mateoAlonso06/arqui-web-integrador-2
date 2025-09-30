@@ -2,11 +2,12 @@ package org.integrador.dto;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
 @Getter
-@RequiredArgsConstructor
+@Setter
 public class CarreraDTO {
-    private final Integer id;
-    private final String nombre;
-    private final Integer duracion;
+    private  Integer id;
+    private  String nombre;
+    private  Integer duracion;
 }

@@ -30,8 +30,8 @@ public class Estudiante {
     @Column(nullable = false)
     private String ciudad;
 
-    @Column(name = "numero_legajo", nullable = false)
-    private String numeroLegajo;
+    @Column(name = "libreta_universitaria", nullable = false)
+    private String libretaUniversitaria;
 
     @OneToMany(mappedBy = "estudiante", fetch = FetchType.LAZY)
     private List<EstudianteCarrera> estudianteCarreras;

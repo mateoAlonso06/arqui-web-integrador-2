@@ -2,16 +2,18 @@ package org.integrador.dto;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
 @Getter
+@Setter
 @RequiredArgsConstructor
 public class EstudianteDTO {
-    private final Long id;
-    private final String nombre;
-    private final String apellido;
-    private final String email;
-    private final Integer edad;
-    private final String genero;
-    private final String ciudad;
-    private final String numeroLegajo;
+    private String dni;
+    private String nombre;
+    private String apellido;
+    private String email;
+    private Integer edad;
+    private String genero;
+    private String ciudad;
+    private String libretaUniversitaria;
 }
