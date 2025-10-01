@@ -22,5 +22,5 @@ public class Carrera {
     private Integer duracion;
 
     @OneToMany(mappedBy = "carrera")
-    private List<EstudianteCarrera> estudianteCarreras;
+    private List<EstudianteCarrera> estudianteCarrera;
 }

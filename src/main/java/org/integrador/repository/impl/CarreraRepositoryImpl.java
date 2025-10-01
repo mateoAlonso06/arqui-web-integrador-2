@@ -40,47 +40,66 @@ public class CarreraRepositoryImpl implements ICarreraRepository {
         }
     }
 
-
-    SELECT c.nombre, COUNT(*)
-    FROM estudianteCarrera ec
-    JOIN carrera c ON ec.id_carrera = c.id
-    GROUP BY c.nombre
-    ORDER BY 2 DESC;
-    CONSULTA PARA LA FUNCION DE ABAJO
-
     @Override
     public List<CarreraDTO> getAllCarrerasConInscriptos() {
         List<CarreraDTO> carrerasDTO = new ArrayList<>();
         try {
-            List<Estudiante> estudiantes = em.createQuery("SELECT ec.carrera.nombre, count(*) FROM EstudianteCarrera ec GROUP BY " +
-                            "ec.carrera" + Carrera.class)
-                    .getResultList();
-            for (Estudiante estudiante : estudiantes) {
-                Carrera carrera = estudiante.getCarrera();
-                if (carrera != null) {
-                    CarreraDTO carreraDTO = new CarreraDTO();
-                    carreraDTO.setId(carrera.getId());
-                    carreraDTO.setNombre(carrera.getNombre());
-                    carreraDTO.setDuracion(carrera.getDuracion());
+            List<Carrera> carreras = em.createQuery("""
+                        SELECT c
+                        FROM EstudianteCarrera ec
+                        JOIN ec.carrera c
+                        GROUP BY c
+                        ORDER BY COUNT(ec) DESC
+                    """, Carrera.class).getResultList();
 
-                    if (!carrerasDTO.contains(carreraDTO)) {
-                        carrerasDTO.add(carreraDTO);
-                    }
-                }
+
+            for (Carrera carrera : carreras) {
+                CarreraDTO dto = new CarreraDTO();
+                dto.setId(carrera.getId());
+                dto.setNombre(carrera.getNombre());
+                dto.setDuracion(carrera.getDuracion());
+                dto.setCantidadInscriptos(carrera.getEstudianteCarrera().size());
+                carrerasDTO.add(dto);
             }
-
-
-
         } catch (Exception e) {
             throw new RuntimeException(e);
         } finally {
             em.close();
         }
-        return ;
+        return carrerasDTO;
     }
 
     @Override
-    public List<EstudianteDTO> getEstudiantesByCarreraId(Integer carreraId) {
-        return List.of();
+    public List<EstudianteDTO> getEstudiantesByCarreraId(Integer carreraId, String ciudad) {
+        List<EstudianteDTO> estudiantesDTO = new ArrayList<>();
+        try {
+            List<Estudiante> estudiantes = em.createQuery("""
+                        SELECT e
+                        FROM EstudianteCarrera ec
+                        JOIN ec.estudiante e
+                        WHERE ec.carrera.id = :carreraId AND ec.estudiante.ciudad = :ciudad
+                    """, Estudiante.class)
+                    .setParameter("carreraId", carreraId)
+                    .setParameter("ciudad", ciudad)
+                    .getResultList();
+
+            for (Estudiante estudiante : estudiantes) {
+                EstudianteDTO dto = new EstudianteDTO();
+                dto.setDni(estudiante.getDni());
+                dto.setNombre(estudiante.getNombre());
+                dto.setApellido(estudiante.getApellido());
+                dto.setEdad(estudiante.getEdad());
+                dto.setGenero(estudiante.getGenero());
+                dto.setCiudad(estudiante.getCiudad());
+                dto.setLibretaUniversitaria(estudiante.getLibretaUniversitaria());
+
+                estudiantesDTO.add(dto);
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        } finally {
+            em.close();
+        }
+        return estudiantesDTO;
     }
 }

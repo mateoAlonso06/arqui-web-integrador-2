@@ -11,5 +11,5 @@ public interface ICarreraRepository {
 
     List<CarreraDTO> getAllCarrerasConInscriptos();
 
-    List<EstudianteDTO> getEstudiantesByCarreraId(Integer carreraId);
+    List<EstudianteDTO> getEstudiantesByCarreraId(Integer carreraId, String ciudad);
 }

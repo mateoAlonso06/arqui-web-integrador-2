@@ -1,6 +1,9 @@
 package org.integrador;
 
+import org.integrador.dto.Reporte;
 import org.integrador.factory.JPAUtil;
+import org.integrador.repository.impl.CarreraRepositoryImpl;
+import org.integrador.repository.impl.ReporteRepositoryImpl;
 
 import javax.persistence.EntityManager;
 import java.io.IOException;
@@ -15,6 +18,16 @@ public class App {
         jpaUtil.insertarEstudianteDesdeCSV("src/main/resources/estudiantes.csv");
         jpaUtil.insertarCarreraDesdeCSV("src/main/resources/carreras.csv");
         jpaUtil.insertarEstudianteCarreraDesdeCSV("src/main/resources/estudianteCarrera.csv");
+
+
+        CarreraRepositoryImpl carreraRepository = new CarreraRepositoryImpl();
+        System.out.println("Carreras con inscriptos:");
+
+        carreraRepository.getAllCarrerasConInscriptos().forEach(System.out::println);
+
+        ReporteRepositoryImpl reporteRepository = new ReporteRepositoryImpl();
+        System.out.println("\nReporte de estudiantes por carrera:");
+        reporteRepository.getReporte().forEach(System.out::println);
 
         // Verificar que los datos se persistieron
         verificarDatos();

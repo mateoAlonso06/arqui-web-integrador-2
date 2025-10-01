@@ -90,7 +90,7 @@ public class JPAUtil {
                 est.setEdad(Integer.parseInt(linea[3]));
                 est.setGenero(linea[4]);
                 est.setCiudad(linea[5]);
-                est.setNumeroLegajo(linea[6]);
+                est.setLibretaUniversitaria(linea[6]);
                 em.persist(est);
             }
             em.getTransaction().commit();
