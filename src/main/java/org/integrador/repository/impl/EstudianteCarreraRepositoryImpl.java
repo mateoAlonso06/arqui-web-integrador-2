@@ -3,13 +3,13 @@ package org.integrador.repository.impl;
 
 import org.integrador.dto.EstudianteCarreraDTO;
 import org.integrador.entity.EstudianteCarrera;
-import org.integrador.factory.JPAUtil;
+import org.integrador.factory.EntityManagerFactory;
 import org.integrador.repository.IEstudianteCarreraRepository;
 
 import javax.persistence.EntityManager;
 
 public class EstudianteCarreraRepositoryImpl implements IEstudianteCarreraRepository {
-    private final EntityManager em = JPAUtil.getEntityManager();
+    private final EntityManager em = EntityManagerFactory.getEntityManager();
 
     public EstudianteCarreraDTO addEstudianteCarrera(EstudianteCarrera estudianteCarrera) {
         try {

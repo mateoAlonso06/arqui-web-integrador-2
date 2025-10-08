@@ -2,7 +2,7 @@ package org.integrador.repository.impl;
 
 import org.integrador.dto.EstudianteDTO;
 import org.integrador.entity.Estudiante;
-import org.integrador.factory.JPAUtil;
+import org.integrador.factory.EntityManagerFactory;
 import org.integrador.repository.IEstudianteRepository;
 
 import javax.persistence.EntityManager;
@@ -12,7 +12,7 @@ import java.util.List;
 public class EstudianteRepositoryImpl implements IEstudianteRepository {
     @Override
     public EstudianteDTO addEstudiante(Estudiante estudiante) {
-        EntityManager em = JPAUtil.getEntityManager();
+        EntityManager em = EntityManagerFactory.getEntityManager();
         try {
             em.getTransaction().begin();
             em.persist(estudiante);
@@ -40,7 +40,7 @@ public class EstudianteRepositoryImpl implements IEstudianteRepository {
 
     @Override
     public List<EstudianteDTO> getAllEstudiantes(int page, int size) {
-        EntityManager em = JPAUtil.getEntityManager();
+        EntityManager em = EntityManagerFactory.getEntityManager();
         try {
             List<Estudiante> estudiantes = em.createQuery("SELECT e FROM Estudiante e ORDER BY e.apellido", Estudiante.class)
                     .setFirstResult((page - 1) * size)
@@ -71,7 +71,7 @@ public class EstudianteRepositoryImpl implements IEstudianteRepository {
 
     @Override
     public EstudianteDTO getEstudianteByLibretaUniversitaria(String libretaUniversitaria) {
-        EntityManager em = JPAUtil.getEntityManager();
+        EntityManager em = EntityManagerFactory.getEntityManager();
         try {
             Estudiante estudiante = em.createQuery("SELECT e FROM Estudiante e WHERE e.libretaUniversitaria = :libreta", Estudiante.class)
                     .setParameter("libreta", libretaUniversitaria)
@@ -95,7 +95,7 @@ public class EstudianteRepositoryImpl implements IEstudianteRepository {
 
     @Override
     public List<EstudianteDTO> getEstudiantesByGenero(String genero) {
-        EntityManager em = JPAUtil.getEntityManager();
+        EntityManager em = EntityManagerFactory.getEntityManager();
         try {
             List<Estudiante> estudiantes = em.createQuery("SELECT e FROM Estudiante e WHERE e.genero = :genero", Estudiante.class)
                     .setParameter("genero", genero)

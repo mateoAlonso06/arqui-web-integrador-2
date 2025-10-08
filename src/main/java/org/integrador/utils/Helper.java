@@ -1,28 +1,17 @@
-package org.integrador.factory;
+package org.integrador.utils;
 
 import com.opencsv.CSVReader;
 import org.integrador.entity.Carrera;
 import org.integrador.entity.Estudiante;
 import org.integrador.entity.EstudianteCarrera;
+import org.integrador.factory.EntityManagerFactory;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
 import java.io.FileReader;
 
-public class JPAUtil {
-    private static final EntityManagerFactory emf;
-
-    static {
-        emf = Persistence.createEntityManagerFactory("arqui-web-i2");
-    }
-
-    public static EntityManager getEntityManager() {
-        return emf.createEntityManager();
-    }
-
+public class Helper {
     public void insertarEstudianteCarreraDesdeCSV(String rutaArchivo) {
-        EntityManager em = JPAUtil.getEntityManager();
+        EntityManager em = EntityManagerFactory.getEntityManager();
 
         try (CSVReader reader = new CSVReader(new FileReader(rutaArchivo))) {
             String[] linea;
@@ -74,7 +63,7 @@ public class JPAUtil {
     }
 
     public void insertarEstudianteDesdeCSV(String rutaArchivo) {
-        EntityManager em = JPAUtil.getEntityManager();
+        EntityManager em = EntityManagerFactory.getEntityManager();
 
         try (CSVReader reader = new CSVReader(new FileReader(rutaArchivo))) {
             String[] linea;
@@ -102,7 +91,7 @@ public class JPAUtil {
     }
 
     public void insertarCarreraDesdeCSV(String rutaArchivo) {
-        EntityManager em = JPAUtil.getEntityManager();
+        EntityManager em = EntityManagerFactory.getEntityManager();
 
         try (CSVReader reader = new CSVReader(new FileReader(rutaArchivo))) {
             String[] linea;

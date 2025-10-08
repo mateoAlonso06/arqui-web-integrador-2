@@ -2,7 +2,7 @@ package org.integrador.repository.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.integrador.dto.Reporte;
-import org.integrador.factory.JPAUtil;
+import org.integrador.factory.EntityManagerFactory;
 import org.integrador.repository.IReporteRepository;
 
 import javax.persistence.EntityManager;
@@ -10,7 +10,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 public class ReporteRepositoryImpl implements IReporteRepository {
-    private EntityManager em = JPAUtil.getEntityManager();
+    private EntityManager em = EntityManagerFactory.getEntityManager();
 
     @Override
     public List<Reporte> getReporte() {

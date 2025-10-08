@@ -4,7 +4,7 @@ import org.integrador.dto.CarreraDTO;
 import org.integrador.dto.EstudianteDTO;
 import org.integrador.entity.Carrera;
 import org.integrador.entity.Estudiante;
-import org.integrador.factory.JPAUtil;
+import org.integrador.factory.EntityManagerFactory;
 import org.integrador.repository.ICarreraRepository;
 
 import javax.persistence.EntityManager;
@@ -15,7 +15,7 @@ public class CarreraRepositoryImpl implements ICarreraRepository {
 
     @Override
     public CarreraDTO addCarrera(Carrera carrera) {
-        EntityManager em = JPAUtil.getEntityManager();
+        EntityManager em = EntityManagerFactory.getEntityManager();
         try {
             em.getTransaction().begin();
             em.persist(carrera);
@@ -39,7 +39,7 @@ public class CarreraRepositoryImpl implements ICarreraRepository {
     }
 
     public CarreraDTO getCarreraByName(String nombre) {
-        EntityManager em = JPAUtil.getEntityManager();
+        EntityManager em = EntityManagerFactory.getEntityManager();
         CarreraDTO carreraDTO = null;
         try {
             Carrera carrera = em.createQuery("SELECT c FROM Carrera c WHERE c.nombre = :nombre", Carrera.class)
@@ -62,7 +62,7 @@ public class CarreraRepositoryImpl implements ICarreraRepository {
 
     @Override
     public List<CarreraDTO> getAllCarrerasConInscriptos() {
-        EntityManager em = JPAUtil.getEntityManager();
+        EntityManager em = EntityManagerFactory.getEntityManager();
         List<CarreraDTO> carrerasDTO = new ArrayList<>();
         try {
             List<Carrera> carreras = em.createQuery("""
@@ -91,7 +91,7 @@ public class CarreraRepositoryImpl implements ICarreraRepository {
 
     @Override
     public List<EstudianteDTO> getEstudiantesByCarreraId(Integer carreraId, String ciudad) {
-        EntityManager em = JPAUtil.getEntityManager();
+        EntityManager em = EntityManagerFactory.getEntityManager();
         List<EstudianteDTO> estudiantesDTO = new ArrayList<>();
         try {
             List<Estudiante> estudiantes = em.createQuery("""
