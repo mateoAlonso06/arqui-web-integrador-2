@@ -3,10 +3,12 @@ package org.integrador.dto;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 @Getter
 @Setter
 @RequiredArgsConstructor
+@ToString
 public class EstudianteDTO {
     private String dni;
     private String nombre;

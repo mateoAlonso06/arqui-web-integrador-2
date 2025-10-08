@@ -10,15 +10,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class EstudianteRepositoryImpl implements IEstudianteRepository {
-    private final EntityManager em = JPAUtil.getEntityManager();
-
     @Override
-    public EstudianteDTO addEstudiante(EstudianteDTO estudiante) {
+    public EstudianteDTO addEstudiante(Estudiante estudiante) {
+        EntityManager em = JPAUtil.getEntityManager();
         try {
             em.getTransaction().begin();
             em.persist(estudiante);
             em.getTransaction().commit();
-            return estudiante;
+
+            EstudianteDTO dto = new EstudianteDTO();
+            dto.setDni(estudiante.getDni());
+            dto.setNombre(estudiante.getNombre());
+            dto.setApellido(estudiante.getApellido());
+            dto.setEdad(estudiante.getEdad());
+            dto.setGenero(estudiante.getGenero());
+            dto.setCiudad(estudiante.getCiudad());
+            dto.setLibretaUniversitaria(estudiante.getLibretaUniversitaria());
+            return dto;
         } catch (Exception e) {
             if (em.getTransaction().isActive()) {
                 em.getTransaction().rollback();
@@ -32,6 +40,7 @@ public class EstudianteRepositoryImpl implements IEstudianteRepository {
 
     @Override
     public List<EstudianteDTO> getAllEstudiantes(int page, int size) {
+        EntityManager em = JPAUtil.getEntityManager();
         try {
             List<Estudiante> estudiantes = em.createQuery("SELECT e FROM Estudiante e ORDER BY e.apellido", Estudiante.class)
                     .setFirstResult((page - 1) * size)
@@ -62,24 +71,21 @@ public class EstudianteRepositoryImpl implements IEstudianteRepository {
 
     @Override
     public EstudianteDTO getEstudianteByLibretaUniversitaria(String libretaUniversitaria) {
+        EntityManager em = JPAUtil.getEntityManager();
         try {
             Estudiante estudiante = em.createQuery("SELECT e FROM Estudiante e WHERE e.libretaUniversitaria = :libreta", Estudiante.class)
                     .setParameter("libreta", libretaUniversitaria)
                     .getSingleResult();
 
-            if (estudiante != null) {
-                EstudianteDTO dto = new EstudianteDTO();
-                dto.setDni(estudiante.getDni());
-                dto.setNombre(estudiante.getNombre());
-                dto.setApellido(estudiante.getApellido());
-                dto.setEdad(estudiante.getEdad());
-                dto.setGenero(estudiante.getGenero());
-                dto.setCiudad(estudiante.getCiudad());
-                dto.setLibretaUniversitaria(estudiante.getLibretaUniversitaria());
-                return dto;
-            } else {
-                return null;
-            }
+            EstudianteDTO dto = new EstudianteDTO();
+            dto.setDni(estudiante.getDni());
+            dto.setNombre(estudiante.getNombre());
+            dto.setApellido(estudiante.getApellido());
+            dto.setEdad(estudiante.getEdad());
+            dto.setGenero(estudiante.getGenero());
+            dto.setCiudad(estudiante.getCiudad());
+            dto.setLibretaUniversitaria(estudiante.getLibretaUniversitaria());
+            return dto;
         } catch (Exception e) {
             throw e;
         } finally {
@@ -89,6 +95,7 @@ public class EstudianteRepositoryImpl implements IEstudianteRepository {
 
     @Override
     public List<EstudianteDTO> getEstudiantesByGenero(String genero) {
+        EntityManager em = JPAUtil.getEntityManager();
         try {
             List<Estudiante> estudiantes = em.createQuery("SELECT e FROM Estudiante e WHERE e.genero = :genero", Estudiante.class)
                     .setParameter("genero", genero)

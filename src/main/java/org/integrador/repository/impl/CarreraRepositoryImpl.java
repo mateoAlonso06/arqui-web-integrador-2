@@ -13,22 +13,20 @@ import java.util.List;
 
 public class CarreraRepositoryImpl implements ICarreraRepository {
 
-    private final EntityManager em = JPAUtil.getEntityManager();
-
     @Override
-    public CarreraDTO addCarrera(Carrera carreraDTO) {
+    public CarreraDTO addCarrera(Carrera carrera) {
+        EntityManager em = JPAUtil.getEntityManager();
         try {
             em.getTransaction().begin();
-            em.persist(carreraDTO);
+            em.persist(carrera);
             em.getTransaction().commit();
 
-            CarreraDTO cDTO = new CarreraDTO();
-            cDTO.setId(carreraDTO.getId());
-            cDTO.setNombre(carreraDTO.getNombre());
-            cDTO.setDuracion(carreraDTO.getDuracion());
-
-            return cDTO;
-
+            CarreraDTO carreraDTO = new CarreraDTO();
+            carreraDTO.setId(carrera.getId());
+            carreraDTO.setNombre(carrera.getNombre());
+            carreraDTO.setDuracion(carrera.getDuracion());
+            carreraDTO.setCantidadInscriptos(carrera.getEstudianteCarrera().size());
+            return carreraDTO;
         } catch (Exception e) {
             if (em.getTransaction().isActive()) {
                 em.getTransaction().rollback();
@@ -40,8 +38,31 @@ public class CarreraRepositoryImpl implements ICarreraRepository {
         }
     }
 
+    public CarreraDTO getCarreraByName(String nombre) {
+        EntityManager em = JPAUtil.getEntityManager();
+        CarreraDTO carreraDTO = null;
+        try {
+            Carrera carrera = em.createQuery("SELECT c FROM Carrera c WHERE c.nombre = :nombre", Carrera.class)
+                    .setParameter("nombre", nombre)
+                    .getSingleResult();
+
+            carreraDTO = new CarreraDTO();
+            carreraDTO.setId(carrera.getId());
+            carreraDTO.setNombre(carrera.getNombre());
+            carreraDTO.setDuracion(carrera.getDuracion());
+            carreraDTO.setCantidadInscriptos(carrera.getEstudianteCarrera().size());
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        } finally {
+            em.close();
+        }
+        return carreraDTO;
+    }
+
     @Override
     public List<CarreraDTO> getAllCarrerasConInscriptos() {
+        EntityManager em = JPAUtil.getEntityManager();
         List<CarreraDTO> carrerasDTO = new ArrayList<>();
         try {
             List<Carrera> carreras = em.createQuery("""
@@ -52,7 +73,6 @@ public class CarreraRepositoryImpl implements ICarreraRepository {
                         ORDER BY COUNT(ec) DESC
                     """, Carrera.class).getResultList();
 
-
             for (Carrera carrera : carreras) {
                 CarreraDTO dto = new CarreraDTO();
                 dto.setId(carrera.getId());
@@ -62,7 +82,7 @@ public class CarreraRepositoryImpl implements ICarreraRepository {
                 carrerasDTO.add(dto);
             }
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw e;
         } finally {
             em.close();
         }
@@ -71,14 +91,15 @@ public class CarreraRepositoryImpl implements ICarreraRepository {
 
     @Override
     public List<EstudianteDTO> getEstudiantesByCarreraId(Integer carreraId, String ciudad) {
+        EntityManager em = JPAUtil.getEntityManager();
         List<EstudianteDTO> estudiantesDTO = new ArrayList<>();
         try {
             List<Estudiante> estudiantes = em.createQuery("""
-                        SELECT e
-                        FROM EstudianteCarrera ec
-                        JOIN ec.estudiante e
-                        WHERE ec.carrera.id = :carreraId AND ec.estudiante.ciudad = :ciudad
-                    """, Estudiante.class)
+                                SELECT e
+                                FROM EstudianteCarrera ec
+                                JOIN ec.estudiante e
+                                WHERE ec.carrera.id = :carreraId AND ec.estudiante.ciudad = :ciudad
+                            """, Estudiante.class)
                     .setParameter("carreraId", carreraId)
                     .setParameter("ciudad", ciudad)
                     .getResultList();
@@ -96,7 +117,7 @@ public class CarreraRepositoryImpl implements ICarreraRepository {
                 estudiantesDTO.add(dto);
             }
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw e;
         } finally {
             em.close();
         }

@@ -29,7 +29,7 @@ public class ReporteRepositoryImpl implements IReporteRepository {
             ).getResultList();
         } catch (Exception e) {
             e.printStackTrace();
-            return List.of();
+            throw e;
         }
     }
 }
