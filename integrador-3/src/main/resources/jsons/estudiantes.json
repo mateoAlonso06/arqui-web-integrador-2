@@ -1,0 +1,182 @@
+[
+  {
+    "dni": "45123987",
+    "nombre": "Lucía",
+    "apellido": "Fernández",
+    "edad": 21,
+    "genero": "Femenino",
+    "ciudad": "Tandil",
+    "libretaUniversitaria": "LU10001"
+  },
+  {
+    "dni": "48291376",
+    "nombre": "Martín",
+    "apellido": "Gómez",
+    "edad": 22,
+    "genero": "Masculino",
+    "ciudad": "Azul",
+    "libretaUniversitaria": "LU10002"
+  },
+  {
+    "dni": "49562387",
+    "nombre": "Camila",
+    "apellido": "Ruiz",
+    "edad": 20,
+    "genero": "Femenino",
+    "ciudad": "Tandil",
+    "libretaUniversitaria": "LU10003"
+  },
+  {
+    "dni": "47583921",
+    "nombre": "Santiago",
+    "apellido": "López",
+    "edad": 23,
+    "genero": "Masculino",
+    "ciudad": "Olavarría",
+    "libretaUniversitaria": "LU10004"
+  },
+  {
+    "dni": "46219735",
+    "nombre": "Valentina",
+    "apellido": "Pérez",
+    "edad": 19,
+    "genero": "Femenino",
+    "ciudad": "Tandil",
+    "libretaUniversitaria": "LU10005"
+  },
+  {
+    "dni": "48652109",
+    "nombre": "Agustín",
+    "apellido": "Moreno",
+    "edad": 24,
+    "genero": "Masculino",
+    "ciudad": "Azul",
+    "libretaUniversitaria": "LU10006"
+  },
+  {
+    "dni": "47301658",
+    "nombre": "Julieta",
+    "apellido": "Ramírez",
+    "edad": 22,
+    "genero": "Femenino",
+    "ciudad": "Balcarce",
+    "libretaUniversitaria": "LU10007"
+  },
+  {
+    "dni": "45187624",
+    "nombre": "Nicolás",
+    "apellido": "Vega",
+    "edad": 21,
+    "genero": "Masculino",
+    "ciudad": "Tandil",
+    "libretaUniversitaria": "LU10008"
+  },
+  {
+    "dni": "46891273",
+    "nombre": "Micaela",
+    "apellido": "Castro",
+    "edad": 20,
+    "genero": "Femenino",
+    "ciudad": "Azul",
+    "libretaUniversitaria": "LU10009"
+  },
+  {
+    "dni": "49321067",
+    "nombre": "Tomás",
+    "apellido": "Acosta",
+    "edad": 25,
+    "genero": "Masculino",
+    "ciudad": "Olavarría",
+    "libretaUniversitaria": "LU10010"
+  },
+  {
+    "dni": "45781234",
+    "nombre": "Sofía",
+    "apellido": "Martínez",
+    "edad": 19,
+    "genero": "Femenino",
+    "ciudad": "Tandil",
+    "libretaUniversitaria": "LU10011"
+  },
+  {
+    "dni": "48907312",
+    "nombre": "Mateo",
+    "apellido": "Díaz",
+    "edad": 23,
+    "genero": "Masculino",
+    "ciudad": "Azul",
+    "libretaUniversitaria": "LU10012"
+  },
+  {
+    "dni": "47612093",
+    "nombre": "Carolina",
+    "apellido": "Torres",
+    "edad": 22,
+    "genero": "Femenino",
+    "ciudad": "Balcarce",
+    "libretaUniversitaria": "LU10013"
+  },
+  {
+    "dni": "45209176",
+    "nombre": "Juan",
+    "apellido": "Molina",
+    "edad": 21,
+    "genero": "Masculino",
+    "ciudad": "Tandil",
+    "libretaUniversitaria": "LU10014"
+  },
+  {
+    "dni": "48562097",
+    "nombre": "Agustina",
+    "apellido": "Sosa",
+    "edad": 20,
+    "genero": "Femenino",
+    "ciudad": "Azul",
+    "libretaUniversitaria": "LU10015"
+  },
+  {
+    "dni": "47901325",
+    "nombre": "Lautaro",
+    "apellido": "Cabrera",
+    "edad": 24,
+    "genero": "Masculino",
+    "ciudad": "Olavarría",
+    "libretaUniversitaria": "LU10016"
+  },
+  {
+    "dni": "46789102",
+    "nombre": "Florencia",
+    "apellido": "Rojas",
+    "edad": 22,
+    "genero": "Femenino",
+    "ciudad": "Tandil",
+    "libretaUniversitaria": "LU10017"
+  },
+  {
+    "dni": "48210976",
+    "nombre": "Benjamín",
+    "apellido": "Campos",
+    "edad": 23,
+    "genero": "Masculino",
+    "ciudad": "Azul",
+    "libretaUniversitaria": "LU10018"
+  },
+  {
+    "dni": "49421783",
+    "nombre": "Daniela",
+    "apellido": "Navarro",
+    "edad": 21,
+    "genero": "Femenino",
+    "ciudad": "Balcarce",
+    "libretaUniversitaria": "LU10019"
+  },
+  {
+    "dni": "45098217",
+    "nombre": "Franco",
+    "apellido": "Luna",
+    "edad": 25,
+    "genero": "Masculino",
+    "ciudad": "Tandil",
+    "libretaUniversitaria": "LU10020"
+  }
+]
