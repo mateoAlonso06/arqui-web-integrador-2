@@ -57,4 +57,9 @@ public class CarreraService implements ICarreraService {
 
         carreraRepository.delete(carrera);
     }
+
+    @Override
+    public Page<CarreraResponseDTO> getAllCarreras(Pageable pageable) {
+        return carreraRepository.findAll(pageable).map(carreraMapper::toCarreraDTO);
+    }
 }

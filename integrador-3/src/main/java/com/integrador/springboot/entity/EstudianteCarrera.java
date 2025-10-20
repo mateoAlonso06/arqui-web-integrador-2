@@ -25,7 +25,7 @@ public class EstudianteCarrera {
     @Column(length = 4, nullable = false)
     private Integer anioInscripcion;
 
-    @Column(length = 4, nullable = false, columnDefinition = "INT DEFAULT 0")
+    @Column(length = 4, columnDefinition = "INT DEFAULT 0")
     private Integer graduacion = 0;
 
     @Column(length = 4, nullable = false)

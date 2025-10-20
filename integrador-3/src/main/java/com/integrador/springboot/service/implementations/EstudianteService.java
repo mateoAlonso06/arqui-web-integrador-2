@@ -13,7 +13,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -61,11 +60,10 @@ public class EstudianteService implements IEstudianteService {
     @Override
     @Transactional(readOnly = true)
     public List<EstudianteResponseDTO> getEstudiantesByGenero(String genero) {
-        List<EstudianteResponseDTO> estudiantesDTO = new ArrayList<>();
         List<Estudiante> estudiantes = estudianteRepository.findByGenero(genero);
 
-        estudiantes.stream().map(estudianteMapper::toDTO).toList();
+        estudiantes.forEach(System.out::println);
 
-        return estudiantesDTO;
+        return estudiantes.stream().map(estudianteMapper::toDTO).toList();
     }
 }

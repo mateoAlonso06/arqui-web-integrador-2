@@ -1,62 +1,42 @@
 [
   {
-    "id": 1,
     "nombre": "Ingeniería en Sistemas de Información",
-    "duracion": 5,
-    "cantidadInscriptos": 320
+    "duracion": 5
   },
   {
-    "id": 2,
     "nombre": "Licenciatura en Administración",
-    "duracion": 4,
-    "cantidadInscriptos": 210
+    "duracion": 4
   },
   {
-    "id": 3,
     "nombre": "Contador Público",
-    "duracion": 5,
-    "cantidadInscriptos": 280
+    "duracion": 5
   },
   {
-    "id": 4,
     "nombre": "Licenciatura en Psicología",
-    "duracion": 5,
-    "cantidadInscriptos": 350
+    "duracion": 5
   },
   {
-    "id": 5,
     "nombre": "Ingeniería Civil",
-    "duracion": 5,
-    "cantidadInscriptos": 180
+    "duracion": 5
   },
   {
-    "id": 6,
     "nombre": "Profesorado en Educación Física",
-    "duracion": 4,
-    "cantidadInscriptos": 150
+    "duracion": 4
   },
   {
-    "id": 7,
     "nombre": "Licenciatura en Comunicación Social",
-    "duracion": 4,
-    "cantidadInscriptos": 240
+    "duracion": 4
   },
   {
-    "id": 8,
     "nombre": "Tecnicatura en Programación",
-    "duracion": 3,
-    "cantidadInscriptos": 400
+    "duracion": 3
   },
   {
-    "id": 9,
     "nombre": "Licenciatura en Biotecnología",
-    "duracion": 5,
-    "cantidadInscriptos": 130
+    "duracion": 5
   },
   {
-    "id": 10,
     "nombre": "Arquitectura",
-    "duracion": 5,
-    "cantidadInscriptos": 200
+    "duracion": 5
   }
 ]

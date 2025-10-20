@@ -1,0 +1,323 @@
+{
+	"info": {
+		"_postman_id": "46ca743c-e2a3-480d-b6ca-ed9ced7df926",
+		"name": "endpoints integrador 3",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "39661247"
+	},
+	"item": [
+		{
+			"name": "estudiantes",
+			"item": [
+				{
+					"name": "traer todos los estudiantes",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/v1/estudiantes",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"estudiantes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "agregar estudiante",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"dni\": 4324234,\n    \"nombre\": \"Sergio\",\n    \"apellido\": \"Serginho\",\n    \"edad\": 35,\n    \"genero\": \"Masculino\",\n    \"ciudad\": \"Tandil\",\n    \"libretaUniversitaria\": \"LU123332\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/api/v1/estudiantes",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"estudiantes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "traer todos los estudiantes por genero",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/v1/estudiantes/genero/Masculino",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"estudiantes",
+								"genero",
+								"Masculino"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "traer estudiante por libreta universitaria",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/v1/estudiantes/libreta-universitaria/LU123332",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"estudiantes",
+								"libreta-universitaria",
+								"LU123332"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "carreras",
+			"item": [
+				{
+					"name": "traer todas las carreras",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/v1/carreras",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"carreras"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "traer todas las carreras con inscriptos",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/v1/carreras/inscriptos",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"carreras",
+								"inscriptos"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "eliminar una carrera por id",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/v1/carreras/1",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"carreras",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "crear carrera",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nombre\": \"TUDAI\",\n    \"duracion\": 3\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/api/v1/carreras",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"carreras"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "traer todos los estudiantes de una determinada carrera y ciudad",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/v1/carreras/1/estudiantes/ciudad/Tandil",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"carreras",
+								"1",
+								"estudiantes",
+								"ciudad",
+								"Tandil"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "estudiante-carrera",
+			"item": [
+				{
+					"name": "dar de baja un estudiante",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/v1/estudiantes-carreras/carrera/1/estudiantes/4324234",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"estudiantes-carreras",
+								"carrera",
+								"1",
+								"estudiantes",
+								"4324234"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "matricular estudiante",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"anioInscripcion\": 2022,\n    \"graduacion\": null,\n    \"antiguedad\": 1\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/api/v1/estudiantes-carreras/carrera/1/estudiantes/4324234",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"estudiantes-carreras",
+								"carrera",
+								"1",
+								"estudiantes",
+								"4324234"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "generar reporte de carreras",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/v1/estudiantes-carreras/reporte-carreras",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"estudiantes-carreras",
+								"reporte-carreras"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

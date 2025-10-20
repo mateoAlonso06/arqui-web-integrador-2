@@ -28,9 +28,14 @@ public class CarreraController {
         return carreraService.addCarrera(carreraRequestDTO);
     }
 
-    @GetMapping
+    @GetMapping("/inscriptos")
     Page<CarreraResponseDTO> getCarrerasConInscriptos(Pageable pageable) {
         return carreraService.getCarrerasConInscriptos(pageable);
+    }
+
+    @GetMapping
+    public Page<CarreraResponseDTO> getAllCarreras(Pageable pageable) {
+        return carreraService.getAllCarreras(pageable);
     }
 
     @GetMapping("/{idCarrera}/estudiantes/ciudad/{ciudad}")

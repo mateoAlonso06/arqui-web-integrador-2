@@ -16,4 +16,6 @@ public interface ICarreraService {
     List<EstudianteResponseDTO> getEstudiantesByCarreraId(Integer idCarrera, String ciudad);
 
     void deleteCarrera(Integer idCarrera);
+
+    Page<CarreraResponseDTO> getAllCarreras(Pageable pageable);
 }

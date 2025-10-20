@@ -39,7 +39,7 @@ public class EstudianteController {
     }
 
     @GetMapping("/genero/{genero}")
-    public List<EstudianteResponseDTO> getEstudiantesByGenero(String genero) {
+    public List<EstudianteResponseDTO> getEstudiantesByGenero(@PathVariable @NotBlank String genero) {
         return estudianteService.getEstudiantesByGenero(genero);
     }
 }

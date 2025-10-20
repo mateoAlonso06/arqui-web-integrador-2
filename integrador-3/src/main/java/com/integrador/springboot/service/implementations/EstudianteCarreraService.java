@@ -1,6 +1,7 @@
 package com.integrador.springboot.service.implementations;
 
 import com.integrador.springboot.dto.requestDTO.EstudianteCarreraRequestDTO;
+import com.integrador.springboot.dto.responseDTO.Reporte;
 import com.integrador.springboot.entity.Carrera;
 import com.integrador.springboot.entity.Estudiante;
 import com.integrador.springboot.entity.EstudianteCarrera;
@@ -14,6 +15,8 @@ import com.integrador.springboot.service.interfaces.IEstudianteCarreraService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -64,5 +67,11 @@ public class EstudianteCarreraService implements IEstudianteCarreraService {
         estudiante.getEstudianteCarreras().remove(matricula);
 
         estudianteCarreraRepository.delete(matricula);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Reporte> getReportes() {
+        return estudianteCarreraRepository.obtenerReporteEstudiantesPorCarrera();
     }
 }
