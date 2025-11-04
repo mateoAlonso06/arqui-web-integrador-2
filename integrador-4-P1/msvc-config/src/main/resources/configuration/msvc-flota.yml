@@ -1,0 +1,16 @@
+server:
+  port: 8083
+
+spring:
+  application:
+    name: msvc-flota
+  data:
+    mongodb:
+      uri: mongodb://mateo:secret123@localhost:27017/msvc_flota?authSource=admin
+
+eureka:
+  instance:
+    hostname: localhost
+  client:
+    service-url:
+        defaultZone: http://localhost:8761/eureka/

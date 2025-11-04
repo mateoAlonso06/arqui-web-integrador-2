@@ -1,0 +1,24 @@
+server:
+  port: 8082
+
+spring:
+  application:
+    name: msvc-facturacion
+  datasource:
+    url: jdbc:postgresql://localhost:5432/msvc_facturacion
+    username: mateo
+    password: password
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    database: postgresql
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/

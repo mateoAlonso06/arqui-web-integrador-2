@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ExternalStorageConfigurationManager" enabled="true" />
+  <component name="MavenProjectsManager">
+    <option name="originalFiles">
+      <list>
+        <option value="$PROJECT_DIR$/pom.xml" />
+        <option value="$PROJECT_DIR$/msvc-viajes/pom.xml" />
+        <option value="$PROJECT_DIR$/msvc-usuarios/pom.xml" />
+        <option value="$PROJECT_DIR$/msvc-flota/pom.xml" />
+        <option value="$PROJECT_DIR$/msvc-tarifas/pom.xml" />
+        <option value="$PROJECT_DIR$/msv-facturacion/pom.xml" />
+        <option value="$PROJECT_DIR$/msvc-mantenimiento/pom.xml" />
+        <option value="$PROJECT_DIR$/msvc-reportes/pom.xml" />
+        <option value="$PROJECT_DIR$/msvc-config/pom.xml" />
+        <option value="$PROJECT_DIR$/msvc-gateway/pom.xml" />
+      </list>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_21" default="true" project-jdk-name="temurin-21" project-jdk-type="JavaSDK" />
+</project>
