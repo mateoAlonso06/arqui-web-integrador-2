@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -28,14 +29,17 @@ public class Viaje {
     @Column(name = "id_cuenta")
     private Long idCuenta; // fk a Cuenta
 
-    @Column(nullable = false)
+    @Column(name = "fecha_inicio", nullable = false)
     private LocalDateTime fechaInicio;
 
-    @Column(nullable = false)
+    @Column(name = "fecha_fin")
     private LocalDateTime fechaFin;
 
     @Column(name = "km_recorridos")
     private Double kmRecorridos;
+
+    @OneToMany(mappedBy = "viaje")
+    private List<Pausa> pausas;
 
     @Override
     public boolean equals(Object o) {

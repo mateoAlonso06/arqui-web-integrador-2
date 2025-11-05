@@ -1,8 +1,10 @@
 package com.integrador.tpe.msvcusuarios.entity;
 
-import com.integrador.tpe.msvcusuarios.enums.EstadoCuenta;
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
@@ -10,7 +12,10 @@ import java.util.Objects;
 import java.util.Set;
 
 @Entity
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "cuentas")
 public class Cuenta {
     @Id
@@ -27,6 +32,10 @@ public class Cuenta {
     // El admin tendra la posibilidad de deshabilitar la cuenta de un usuario
     @Column(name = "estado_cuenta", nullable = false, columnDefinition = "boolean default true")
     private Boolean estadoCuenta = true;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "tipo_cuenta", nullable = false, columnDefinition = "varchar(20) default 'BASICA'")
+    private TipoCuenta tipoCuenta;
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = {
             CascadeType.MERGE

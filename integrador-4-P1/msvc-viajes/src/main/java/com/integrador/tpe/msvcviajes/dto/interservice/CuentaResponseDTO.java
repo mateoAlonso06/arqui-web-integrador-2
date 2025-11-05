@@ -1,4 +1,4 @@
 package com.integrador.tpe.msvcviajes.dto.interservice;
 
-public class ParadaInfo {
+public record CuentaResponseDTO() {
 }

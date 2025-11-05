@@ -1,6 +1,7 @@
 package com.integrador.tpe.msvcusuarios.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.integrador.tpe.msvcusuarios.dto.inteservice.Viaje;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -38,7 +39,7 @@ public class Usuario {
     @ManyToMany(mappedBy = "usuarios", fetch = FetchType.LAZY)
     @JsonBackReference
     private Set<Cuenta> cuentas = new HashSet<>();
-
+    
     @PrePersist
     private void prePersist() {
         this.fechaAlta = LocalDateTime.now();
