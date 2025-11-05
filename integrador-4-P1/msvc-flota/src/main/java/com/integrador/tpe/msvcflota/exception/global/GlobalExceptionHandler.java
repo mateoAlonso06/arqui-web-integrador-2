@@ -1,4 +1,4 @@
-package com.integrador.tpe.msvcusuarios.exception;
+package com.integrador.tpe.msvcflota.exception.global;
 
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.ResponseEntity;

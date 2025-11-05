@@ -1,4 +1,4 @@
-package com.integrador.tpe.msvcflota.dto;
+package com.integrador.tpe.msvcflota.dto.responses;
 
 import com.integrador.tpe.msvcflota.entity.EstadoMonopatin;
 import com.integrador.tpe.msvcflota.entity.ParadaInfo;

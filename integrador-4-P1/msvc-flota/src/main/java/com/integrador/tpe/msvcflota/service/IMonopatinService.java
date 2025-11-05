@@ -1,7 +1,7 @@
 package com.integrador.tpe.msvcflota.service;
 
-import com.integrador.tpe.msvcflota.dto.MonopatinRequestDTO;
-import com.integrador.tpe.msvcflota.dto.MonopatinResponseDTO;
+import com.integrador.tpe.msvcflota.dto.request.MonopatinRequestDTO;
+import com.integrador.tpe.msvcflota.dto.responses.MonopatinResponseDTO;
 import org.bson.types.ObjectId;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

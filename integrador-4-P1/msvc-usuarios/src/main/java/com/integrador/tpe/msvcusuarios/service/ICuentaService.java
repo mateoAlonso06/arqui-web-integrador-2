@@ -1,7 +1,7 @@
 package com.integrador.tpe.msvcusuarios.service;
 
-import com.integrador.tpe.msvcusuarios.dto.CuentaRequestDTO;
-import com.integrador.tpe.msvcusuarios.dto.CuentaResponseDTO;
+import com.integrador.tpe.msvcusuarios.dto.request.CuentaRequestDTO;
+import com.integrador.tpe.msvcusuarios.dto.response.CuentaResponseDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 

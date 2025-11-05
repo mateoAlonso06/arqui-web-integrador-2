@@ -1,4 +1,4 @@
-package com.integrador.tpe.msvcusuarios.dto;
+package com.integrador.tpe.msvcusuarios.dto.request;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;

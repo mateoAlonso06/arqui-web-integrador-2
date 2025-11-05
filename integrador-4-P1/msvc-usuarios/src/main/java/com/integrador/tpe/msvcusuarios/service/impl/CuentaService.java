@@ -1,7 +1,7 @@
 package com.integrador.tpe.msvcusuarios.service.impl;
 
-import com.integrador.tpe.msvcusuarios.dto.CuentaRequestDTO;
-import com.integrador.tpe.msvcusuarios.dto.CuentaResponseDTO;
+import com.integrador.tpe.msvcusuarios.dto.request.CuentaRequestDTO;
+import com.integrador.tpe.msvcusuarios.dto.response.CuentaResponseDTO;
 import com.integrador.tpe.msvcusuarios.entity.Cuenta;
 import com.integrador.tpe.msvcusuarios.entity.Usuario;
 import com.integrador.tpe.msvcusuarios.exception.CuentaNotFoundException;
@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Servicio para la gestión de cuentas de usuario.
@@ -35,6 +36,7 @@ public class CuentaService implements ICuentaService {
      * @return página de cuentas en formato CuentaResponseDTO
      */
     @Override
+    @Transactional(readOnly = true)
     public Page<CuentaResponseDTO> getAllCuentas(Boolean habilitado, Pageable pageable) {
         Page<Cuenta> cuentas = (habilitado != null)
                 ? this.cuentaRepository.findCuentaByEstadoCuenta(habilitado, pageable)
@@ -51,6 +53,7 @@ public class CuentaService implements ICuentaService {
      * @throws CuentaNotFoundException si no existe la cuenta con el ID proporcionado
      */
     @Override
+    @Transactional(readOnly = true)
     public CuentaResponseDTO getCuentaById(Long id) {
         return cuentaMapper.toResponse(
                 cuentaRepository.findById(id)
@@ -65,6 +68,7 @@ public class CuentaService implements ICuentaService {
      * @throws CuentaNotFoundException si no existe la cuenta con el ID proporcionado
      */
     @Override
+    @Transactional
     public void deleteCuentaById(Long id) {
         Cuenta cuenta = cuentaRepository.findById(id)
                 .orElseThrow(() -> new CuentaNotFoundException("No existe cuenta con ID: " + id));
@@ -78,6 +82,7 @@ public class CuentaService implements ICuentaService {
      * @return CuentaResponseDTO de la cuenta creada
      */
     @Override
+    @Transactional
     public CuentaResponseDTO createCuenta(CuentaRequestDTO cuentaCreateDTO) {
         if (cuentaRepository.existsCuentaByIdCuentaMercadoPago(cuentaCreateDTO.idCuentaMercadoPago()))
             throw new IllegalArgumentException("Ya existe una cuenta asociada al ID de Mercado Pago: " + cuentaCreateDTO.idCuentaMercadoPago());
@@ -95,6 +100,7 @@ public class CuentaService implements ICuentaService {
      * @throws CuentaNotFoundException si no existe la cuenta con el ID proporcionado
      */
     @Override
+    @Transactional
     public CuentaResponseDTO habilitarCuenta(Long id) {
         Cuenta cuenta = cuentaRepository.findById(id)
                 .orElseThrow(() -> new CuentaNotFoundException("No existe cuenta con ID: " + id));
@@ -116,6 +122,7 @@ public class CuentaService implements ICuentaService {
      * @throws CuentaNotFoundException si no existe la cuenta con el ID proporcionado
      */
     @Override
+    @Transactional
     public CuentaResponseDTO deshabilitarCuenta(Long id) {
         Cuenta cuenta = cuentaRepository.findById(id)
                 .orElseThrow(() -> new CuentaNotFoundException("No existe cuenta con ID: " + id));
@@ -130,6 +137,7 @@ public class CuentaService implements ICuentaService {
     }
 
     @Override
+    @Transactional
     public void asociarUsuarioACuenta(Long idCuenta, Long idUsuario) {
         // - both entities have lazy loading relationships | 2 querys vs 1 query with join
         // - is better query the association existence in the database.
@@ -146,6 +154,7 @@ public class CuentaService implements ICuentaService {
     }
 
     @Override
+    @Transactional
     public void removerUsuarioDeCuenta(Long idCuenta, Long idUsuario) {
         if (!cuentaRepository.existeAsociacionCuentaUsuario(idCuenta, idUsuario))
             throw new IllegalArgumentException("La cuenta con ID: " + idCuenta + " ya está asociada al usuario con ID: " + idUsuario);

@@ -1,7 +1,7 @@
 package com.integrador.tpe.msvcflota.controller;
 
-import com.integrador.tpe.msvcflota.dto.MonopatinRequestDTO;
-import com.integrador.tpe.msvcflota.dto.MonopatinResponseDTO;
+import com.integrador.tpe.msvcflota.dto.request.MonopatinRequestDTO;
+import com.integrador.tpe.msvcflota.dto.responses.MonopatinResponseDTO;
 import com.integrador.tpe.msvcflota.service.IMonopatinService;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;

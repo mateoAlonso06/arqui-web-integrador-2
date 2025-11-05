@@ -1,6 +1,4 @@
-package com.integrador.tpe.msvcusuarios.dto;
-
-import com.integrador.tpe.msvcusuarios.enums.EstadoCuenta;
+package com.integrador.tpe.msvcusuarios.dto.response;
 
 public record CuentaResponseDTO(
         Long id,
