@@ -8,12 +8,12 @@ import org.springframework.data.domain.Pageable;
 import java.time.LocalDateTime;
 
 public interface IViajeService {
-    ViajeResponseDTO iniciarViaje(Long idUsuario, Long idMonopatin, Long idCuenta);
+    ViajeResponseDTO iniciarViaje(ViajeRequestDTO viajeRequestDTO);
 
     ViajeResponseDTO getViajeById(Long idViaje);
 
     void deleteViajeById(Long idViaje);
 
-    // Puede filtrar los viajes por fecha de inicio
-    Page<ViajeResponseDTO> getAllViajes(Pageable pageable, LocalDateTime fechaInicio);
+    // opcionalmente filtrar por fecha de viaje
+    Page<ViajeResponseDTO> getAllViajes(Pageable pageable, LocalDateTime fecha);
 }

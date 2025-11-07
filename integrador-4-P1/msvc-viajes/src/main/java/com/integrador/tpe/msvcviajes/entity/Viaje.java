@@ -1,12 +1,10 @@
 package com.integrador.tpe.msvcviajes.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -15,18 +13,20 @@ import java.util.Objects;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
+@Table(name = "viajes")
 public class Viaje {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "id_monopatin")
+    @Column(name = "id_monopatin", nullable = false)
     private Long idMonopatin; // fk a Monopatin
 
-    @Column(name = "id_usuario")
+    @Column(name = "id_usuario", nullable = false)
     private Long idUsuario; // fk a Usuario
 
-    @Column(name = "id_cuenta")
+    @Column(name = "id_cuenta", nullable = false)
     private Long idCuenta; // fk a Cuenta
 
     @Column(name = "fecha_inicio", nullable = false)
@@ -38,8 +38,8 @@ public class Viaje {
     @Column(name = "km_recorridos")
     private Double kmRecorridos;
 
-    @OneToMany(mappedBy = "viaje")
-    private List<Pausa> pausas;
+    @OneToMany(mappedBy = "viaje", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Pausa> pausas = new ArrayList<>();
 
     @Override
     public boolean equals(Object o) {

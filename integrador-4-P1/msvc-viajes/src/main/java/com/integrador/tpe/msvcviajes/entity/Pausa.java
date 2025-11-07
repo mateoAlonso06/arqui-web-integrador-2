@@ -25,7 +25,7 @@ public class Pausa {
     @Column(name = "fecha_fin")
     private LocalDateTime fechaFin;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     @JoinColumn(name = "viaje_id", nullable = false)
     private Viaje viaje;
 

@@ -31,14 +31,15 @@ public class Cuenta {
 
     // El admin tendra la posibilidad de deshabilitar la cuenta de un usuario
     @Column(name = "estado_cuenta", nullable = false, columnDefinition = "boolean default true")
-    private Boolean estadoCuenta = true;
+    private boolean estadoCuenta = true;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "tipo_cuenta", nullable = false, columnDefinition = "varchar(20) default 'BASICA'")
     private TipoCuenta tipoCuenta;
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = {
-            CascadeType.MERGE
+            CascadeType.MERGE,
+            CascadeType.PERSIST
     })
     @JoinTable(
             name = "cuentas_usuarios",
@@ -60,6 +61,10 @@ public class Cuenta {
     public void addUsuario(Usuario usuario) {
         this.usuarios.add(usuario);
         usuario.getCuentas().add(this);
+    }
+
+    public boolean isCuentaHabilitada() {
+        return estadoCuenta;
     }
 
     @Override
