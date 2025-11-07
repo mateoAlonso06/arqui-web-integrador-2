@@ -6,6 +6,7 @@ import com.integrador.tpe.msvcviajes.dto.interservice.MonopatinResponseDTO;
 import com.integrador.tpe.msvcviajes.dto.interservice.ParadaResponseDTO;
 import com.integrador.tpe.msvcviajes.dto.request.ViajeRequestDTO;
 import com.integrador.tpe.msvcviajes.dto.response.ViajeResponseDTO;
+import com.integrador.tpe.msvcviajes.entity.Pausa;
 import com.integrador.tpe.msvcviajes.entity.Viaje;
 import com.integrador.tpe.msvcviajes.exception.UsuarioNotFoundException;
 import com.integrador.tpe.msvcviajes.exception.ViajeNotFoundException;
@@ -17,6 +18,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -96,6 +98,12 @@ public class ViajeService implements IViajeService {
                 .mapToDouble(Viaje::getKmRecorridos)
                 .sum();
 
+        Long duracionViaje = Duration.between(viaje.getFechaInicio(), viaje.getFechaFin()).toMinutes();
+
+        Double tiempoDePausa = 0.0;
+        for (Pausa p : viaje.getPausas())
+            tiempoDePausa += Duration.between(p.getFechaInicio(), p.getFechaFin()).toMinutes();
+
         monopatinClient.actualizarRecorridoMonopatin(idMonopatin, viajeRequestDTO.getKmRecorridos());
 
         InformacionViaje info = InformacionViaje.builder()
@@ -106,6 +114,8 @@ public class ViajeService implements IViajeService {
                 .fechaInicio(viaje.getFechaInicio())
                 .tipoCuenta(cuentaClient.getTipoCuenta(idCuenta)) // "BASICA" o "PREMIUM"
                 .kmHechosPorElUsuario(kmHechosPorElUsuario)
+                .tiempoDePausa(tiempoDePausa)
+                .duracionViaje(duracionViaje)
                 .fechaFin(viaje.getFechaFin())
                 .build();
     }

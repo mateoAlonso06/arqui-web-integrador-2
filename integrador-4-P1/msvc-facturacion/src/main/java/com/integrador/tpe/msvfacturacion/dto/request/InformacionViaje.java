@@ -19,5 +19,7 @@ public class InformacionViaje {
     private String tipoCuenta;
     private LocalDateTime fechaInicio;
     private LocalDateTime fechaFin;
+    private Double tiempoDePausa;
     private Double kmHechosPorElUsuario;
+    private Long duracionViaje;
 }

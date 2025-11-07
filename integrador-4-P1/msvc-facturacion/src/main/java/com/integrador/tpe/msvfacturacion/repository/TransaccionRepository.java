@@ -6,4 +6,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface TransaccionRepository extends JpaRepository<Transaccion, Long> {
+    boolean existsByIdViaje(Long idViaje);
+
+    boolean existsByIdViajeAndCuentaCorriente_IdCuenta(Long idViaje, Long cuentaCorrienteIdCuenta);
 }
