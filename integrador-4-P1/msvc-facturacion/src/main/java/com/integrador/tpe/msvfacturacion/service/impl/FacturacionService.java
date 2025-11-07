@@ -42,7 +42,6 @@ public class FacturacionService implements IFacturacionService {
                 .cuentaCorriente(cuentaCorriente) // seteo fk
                 .build();
 
-        // persisto en ambos lados de la relacion
         cuentaCorriente.getTransacciones().add(transaccion);
         CuentaCorriente cuentaCorriento = cuentaCorrienteRepository.save(cuentaCorriente);
         return cuentaCorrienteMapper.toResponseDTO(cuentaCorriento);
@@ -64,22 +63,17 @@ public class FacturacionService implements IFacturacionService {
         BigDecimal duracionSinPausa = BigDecimal.valueOf(informacionViaje.getDuracionViaje())
                 .subtract(BigDecimal.valueOf(informacionViaje.getTiempoDePausa()));
 
+        if (tarifaExtraPausa) {
+            montoACobrar = montoACobrar.add(
+                    montoTarifas.getTarifaPausa().multiply(BigDecimal.valueOf(informacionViaje.getTiempoDePausa()))
+            );
+        }
         if (!usuarioPremium) {
             montoACobrar = montoTarifas.getTarifaBase().multiply(duracionSinPausa);
-            if (tarifaExtraPausa) {
-                montoACobrar = montoACobrar.add(
-                        montoTarifas.getTarifaPausa().multiply(BigDecimal.valueOf(informacionViaje.getTiempoDePausa()))
-                );
-            }
         } else {
             if (informacionViaje.getKmHechosPorElUsuario() > 100) {
                 montoACobrar = montoTarifas.getTarifaBase().multiply(duracionSinPausa)
                         .divide(BigDecimal.valueOf(2), BigDecimal.ROUND_HALF_UP);
-            }
-            if (tarifaExtraPausa) {
-                montoACobrar = montoACobrar.add(
-                        montoTarifas.getTarifaPausa().multiply(BigDecimal.valueOf(informacionViaje.getTiempoDePausa()))
-                );
             }
         }
 
