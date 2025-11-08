@@ -14,6 +14,8 @@ public interface IViajeService {
 
     void deleteViajeById(Long idViaje);
 
+    void finalizarViaje(Long idViaje, ViajeRequestDTO viajeRequestDTO);
+
     // opcionalmente filtrar por fecha de viaje
     Page<ViajeResponseDTO> getAllViajes(Pageable pageable, LocalDateTime fecha);
 }

@@ -105,7 +105,7 @@ public class CuentaService implements ICuentaService {
         Cuenta cuenta = cuentaRepository.findById(id)
                 .orElseThrow(() -> new CuentaNotFoundException("No existe cuenta con ID: " + id));
 
-        if (cuenta.getEstadoCuenta() != null && cuenta.getEstadoCuenta().equals(false)) {
+        if (!cuenta.isCuentaHabilitada()) {
             cuenta.setEstadoCuenta(true);
             Cuenta cuentaActualizada = cuentaRepository.save(cuenta);
             return cuentaMapper.toResponse(cuentaActualizada);
@@ -127,7 +127,7 @@ public class CuentaService implements ICuentaService {
         Cuenta cuenta = cuentaRepository.findById(id)
                 .orElseThrow(() -> new CuentaNotFoundException("No existe cuenta con ID: " + id));
 
-        if (cuenta.getEstadoCuenta() != null && cuenta.getEstadoCuenta().equals(true)) {
+        if (cuenta.isCuentaHabilitada()) {
             cuenta.setEstadoCuenta(false);
             Cuenta cuentaActualizada = cuentaRepository.save(cuenta);
             return cuentaMapper.toResponse(cuentaActualizada);

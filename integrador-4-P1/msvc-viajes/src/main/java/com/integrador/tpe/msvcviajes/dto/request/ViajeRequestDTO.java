@@ -10,16 +10,16 @@ import lombok.Setter;
 @Setter
 @Builder
 public class ViajeRequestDTO {
-    @NotNull
-    @Positive
+    @NotNull @Positive
     private Long idMonopatin;
 
-    @NotNull
-    @Positive
+    @NotNull @Positive
     private Long idCuenta;
 
-    @NotNull
-    @Positive
+    @NotNull @Positive
+    private Long idParada;
+
+    @NotNull @Positive
     private Long idUsuario;
 
     @Positive

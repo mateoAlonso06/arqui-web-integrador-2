@@ -1,11 +1,11 @@
 server:
-  port: 8084
+  port: 8087
 
 spring:
   application:
-    name: msvc-mantenimiento
+    name: msvc-viajes
   datasource:
-    url: jdbc:postgresql://localhost:5432/msvc-mantenimiento
+    url: jdbc:postgresql://localhost:5432/msvc-viajes
     username: mateo
     password: secret
     driver-class-name: org.postgresql.Driver

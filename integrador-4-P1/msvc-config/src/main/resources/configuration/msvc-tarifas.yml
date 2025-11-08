@@ -5,7 +5,7 @@ spring:
   application:
     name: msvc-tarifas
   datasource:
-    url: jdbc:postgresql://localhost:5432/msvc_tarifas
+    url: jdbc:postgresql://localhost:5432/msvc-tarifas
     username: mateo
     password: secret
     driver-class-name: org.postgresql.Driver

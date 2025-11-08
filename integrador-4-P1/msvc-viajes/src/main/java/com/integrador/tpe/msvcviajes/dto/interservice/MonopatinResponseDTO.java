@@ -1,13 +1,13 @@
 package com.integrador.tpe.msvcviajes.dto.interservice;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.integrador.tpe.msvcviajes.dto.interservice.utils.EstadoMonopatin;
+import com.integrador.tpe.msvcviajes.dto.interservice.utils.UbicacionGPS;
+import lombok.*;
 
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 @Builder
 public class MonopatinResponseDTO {
     private Long id;

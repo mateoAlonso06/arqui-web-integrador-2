@@ -9,11 +9,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 @FeignClient(name = "msvc-flota", path = "/monopatines")
 public interface MonopatinFeignClient {
-    @GetMapping("/disponibilidad/{idMonopatin}")
-    boolean verificarDisponibilidadMonopatin(@PathVariable Long idMonopatin);
-
     @GetMapping("/{idMonopatin}")
     MonopatinResponseDTO getMonopatinById(@PathVariable Long idMonopatin);
+
+    @GetMapping("/{id}/estado")
+    void actualizarEstadoMonopatin(@PathVariable Long id, @RequestBody String estado);
 
     @PatchMapping("/{idMonopatin}/recorrido")
     void actualizarRecorridoMonopatin(@PathVariable Long idMonopatin, @RequestBody Double kmRecorridos);

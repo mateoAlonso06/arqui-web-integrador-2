@@ -7,6 +7,7 @@ import com.integrador.tpe.msvfacturacion.dto.response.CuentaCorrienteResponseDTO
 import com.integrador.tpe.msvfacturacion.entity.CuentaCorriente;
 import com.integrador.tpe.msvfacturacion.entity.TipoTransaccion;
 import com.integrador.tpe.msvfacturacion.entity.Transaccion;
+import com.integrador.tpe.msvfacturacion.mapper.CuentaCorrienteMapper;
 import com.integrador.tpe.msvfacturacion.repository.CuentaCorrienteRepository;
 import com.integrador.tpe.msvfacturacion.repository.TransaccionRepository;
 import com.integrador.tpe.msvfacturacion.service.IFacturacionService;
@@ -21,6 +22,7 @@ import java.math.BigDecimal;
 public class FacturacionService implements IFacturacionService {
     private final CuentaCorrienteRepository cuentaCorrienteRepository;
     private final TransaccionRepository transaccionRepository;
+    private final CuentaCorrienteMapper cuentaCorrienteMapper;
     private final TarifaFeignClient tarifaClient;
 
     @Transactional
@@ -90,6 +92,6 @@ public class FacturacionService implements IFacturacionService {
                 .build();
 
         cuentaCorriente.getTransacciones().add(transaccion);
-        CuentaCorriente cuentaCorriento = cuentaCorrienteRepository.save(cuentaCorriente);
+        cuentaCorrienteRepository.save(cuentaCorriente);
     }
 }

@@ -1,7 +1,7 @@
 package com.integrador.tpe.msvcviajes.service.impl;
 
 import com.integrador.tpe.msvcviajes.clients.*;
-import com.integrador.tpe.msvcviajes.dto.interservice.InformacionViaje;
+import com.integrador.tpe.msvcviajes.dto.response.InformacionViaje;
 import com.integrador.tpe.msvcviajes.dto.interservice.MonopatinResponseDTO;
 import com.integrador.tpe.msvcviajes.dto.interservice.ParadaResponseDTO;
 import com.integrador.tpe.msvcviajes.dto.request.ViajeRequestDTO;
@@ -17,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -36,14 +37,21 @@ public class ViajeService implements IViajeService {
     private final ParadaFeignClient paradaClient;
 
     @Override
+    @Transactional
     public ViajeResponseDTO iniciarViaje(ViajeRequestDTO viajeRequestDTO) {
         Long idMonopatin = viajeRequestDTO.getIdMonopatin();
         Long idUsuario = viajeRequestDTO.getIdUsuario();
         Long idCuenta = viajeRequestDTO.getIdCuenta();
+        Long idParada = viajeRequestDTO.getIdParada();
 
-        // Cuando se lancen excepciones a nivel de microservicio externo, acá llegara un codigo distinto a 2xx y se manejara en un handler
-        if (!monopatinClient.verificarDisponibilidadMonopatin(idMonopatin)) // monopatin libre y funcionando
-            throw new IllegalStateException("El monopatín no está disponible para iniciar un viaje.");
+        ParadaResponseDTO paradaInicio = paradaClient.getParadaById(idParada);
+        MonopatinResponseDTO monopatin = monopatinClient.getMonopatinById(idMonopatin);
+
+        if (!monopatin.getUbicacionGPS().equals(paradaInicio.getUbicacionGPS()) && paradaInicio.getId().equals(monopatin.getIdParada()))
+            throw new IllegalStateException("EL monopatín no se encuentra en la ubicación de la parada.");
+
+        if (!monopatin.getEstado().equals("LIBRE"))
+            throw new IllegalStateException("El monopatín con id " + idMonopatin + " no está disponible para iniciar un viaje.");
 
         if (!usuarioClient.existUsuarioById(idUsuario)) // TODO: cuando se implemente JWT quizas haya que borrar esta verifacion
             throw new UsuarioNotFoundException("El usuario con id " + idUsuario + " no existe.");
@@ -57,7 +65,10 @@ public class ViajeService implements IViajeService {
         if (viajeRepository.existsViajeByIdUsuarioAndFechaFinIsNull(idUsuario))
             throw new IllegalStateException("El usuario con id " + idUsuario + " ya tiene un viaje activo.");
 
-        // if: que hacer con el saldo de la cuenta para iniciar un viaje
+        if (facturacionClient.tieneDeudasPendientes(idCuenta))
+            throw new IllegalStateException("La cuenta con id " + idCuenta + " tiene deudas pendientes.");
+
+        monopatinClient.actualizarEstadoMonopatin(idMonopatin, "EN_USO");
 
         Viaje viaje = Viaje.builder()
                 .idMonopatin(idMonopatin)
@@ -70,10 +81,13 @@ public class ViajeService implements IViajeService {
         return viajeMapper.toResponseDTO(saved);
     }
 
-    public void finalizarViaje(Long idViaje, Long idParada, ViajeRequestDTO viajeRequestDTO) {
+    @Override
+    @Transactional
+    public void finalizarViaje(Long idViaje, ViajeRequestDTO viajeRequestDTO) {
         Long idMonopatin = viajeRequestDTO.getIdMonopatin();
         Long idUsuario = viajeRequestDTO.getIdUsuario();
         Long idCuenta = viajeRequestDTO.getIdCuenta();
+        Long idParada = viajeRequestDTO.getIdParada();
 
         Viaje viaje = viajeRepository.findById(idViaje)
                 .orElseThrow(() -> new ViajeNotFoundException("Viaje con id " + idViaje + " no encontrado."));
@@ -105,6 +119,7 @@ public class ViajeService implements IViajeService {
             tiempoDePausa += Duration.between(p.getFechaInicio(), p.getFechaFin()).toMinutes();
 
         monopatinClient.actualizarRecorridoMonopatin(idMonopatin, viajeRequestDTO.getKmRecorridos());
+        monopatinClient.actualizarEstadoMonopatin(idMonopatin, "LIBRE");
 
         InformacionViaje info = InformacionViaje.builder()
                 .idViaje(idViaje)
@@ -121,6 +136,7 @@ public class ViajeService implements IViajeService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public ViajeResponseDTO getViajeById(Long idViaje) {
         Viaje viaje = viajeRepository.findById(idViaje)
                 .orElseThrow(() -> new ViajeNotFoundException("Viaje con id " + idViaje + " no encontrado."));
@@ -128,6 +144,7 @@ public class ViajeService implements IViajeService {
     }
 
     @Override
+    @Transactional
     public void deleteViajeById(Long idViaje) {
         // Van a quedar registros de viajes en facturacion probablemente apuntando hacia viajes que no existen
         if (!viajeRepository.existsById(idViaje)) {
@@ -140,6 +157,7 @@ public class ViajeService implements IViajeService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Page<ViajeResponseDTO> getAllViajes(Pageable pageable, LocalDateTime fecha) {
         if (fecha != null) {
             return viajeRepository.findViajeByFechaInicio(fecha, pageable)

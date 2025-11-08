@@ -1,4 +1,4 @@
-package com.integrador.tpe.msvcviajes.dto.interservice;
+package com.integrador.tpe.msvcviajes.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

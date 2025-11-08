@@ -1,7 +1,5 @@
 package com.integrador.tpe.msvcusuarios.service.impl;
 
-import com.integrador.tpe.msvcusuarios.clients.ViajeFeignClient;
-import com.integrador.tpe.msvcusuarios.dto.inteservice.Viaje;
 import com.integrador.tpe.msvcusuarios.dto.request.UsuarioRequestDTO;
 import com.integrador.tpe.msvcusuarios.dto.request.UsuarioUpdateDTO;
 import com.integrador.tpe.msvcusuarios.dto.response.UsuarioResponseDTO;
@@ -16,16 +14,14 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-
 @Service
 @RequiredArgsConstructor
 public class UsuarioService implements IUsuarioService {
     private final IUsuarioRepository usuarioRepository;
-    private final ViajeFeignClient viajeFeignClient;
     private final UsuarioMapper usuarioMapper;
 
     @Override
+    @Transactional
     public UsuarioResponseDTO createUsuario(UsuarioRequestDTO usuarioRequestDTO) {
         if (usuarioRepository.existsByEmail(usuarioRequestDTO.email()))
             throw new IllegalArgumentException("Ya existe un usuario con email: " + usuarioRequestDTO.email());
@@ -37,6 +33,7 @@ public class UsuarioService implements IUsuarioService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public UsuarioResponseDTO getUsuarioById(Long id) {
         Usuario usuario = usuarioRepository.findById(id)
                 .orElseThrow(() -> new UsuarioNotFoundException("No existe un usuario con ID: " + id));
@@ -45,12 +42,14 @@ public class UsuarioService implements IUsuarioService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Page<UsuarioResponseDTO> getAllUsuarios(Pageable pageable) {
         return usuarioRepository.findAll(pageable)
                 .map(usuarioMapper::toResponseDTO);
     }
 
     @Override
+    @Transactional
     public void deleteUsuario(Long id) {
         if (!usuarioRepository.existsById(id))
             throw new IllegalArgumentException("No existe un usuario con ID: " + id);
@@ -82,12 +81,5 @@ public class UsuarioService implements IUsuarioService {
 
         Usuario updated = usuarioRepository.save(usuarioToUpdate);
         return usuarioMapper.toResponseDTO(updated);
-    }
-
-    public List<Viaje> getViajesByUsuarioId(Long idUsuario) {
-        Usuario usuario = usuarioRepository.findById(idUsuario)
-                .orElseThrow(() -> new UsuarioNotFoundException("No existe un usuario con ID: " + idUsuario));
-
-        return viajeFeignClient.obtenerViajesPorUsuario(usuario.getId());
     }
 }
