@@ -1,5 +1,7 @@
 package com.integrador.tpe.msvcviajes.controller;
 
+import com.integrador.tpe.msvcviajes.dto.interservice.request.ViajeReporteRequestDTO;
+import com.integrador.tpe.msvcviajes.dto.interservice.response.ViajeReporteResponseDTO;
 import com.integrador.tpe.msvcviajes.dto.request.ViajeRequestDTO;
 import com.integrador.tpe.msvcviajes.dto.response.ViajeResponseDTO;
 import com.integrador.tpe.msvcviajes.service.IViajeService;
@@ -15,6 +17,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -59,5 +62,11 @@ public class ViajeController {
             @RequestParam(required = false) LocalDateTime fecha) {
         Page<ViajeResponseDTO> viajes = viajeService.getAllViajes(pageable, fecha);
         return ResponseEntity.ok(viajes);
+    }
+
+    @GetMapping("/monopatines/reporte")
+    public ResponseEntity<List<ViajeReporteResponseDTO>> getAllViajesHechosPorAnioConCantidadViajesX(@RequestBody @Valid ViajeReporteRequestDTO viajeReporteRequestDTO) {
+        List<ViajeReporteResponseDTO> viajes = viajeService.findAllViajesHechosPorAnioConCantidadViajesX(viajeReporteRequestDTO);
+        return ResponseEntity.ok().body(viajes);
     }
 }

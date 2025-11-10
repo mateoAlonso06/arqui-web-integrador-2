@@ -1,6 +1,6 @@
 package com.integrador.tpe.msvcviajes.clients;
 
-import com.integrador.tpe.msvcviajes.dto.response.InformacionViaje;
+import com.integrador.tpe.msvcviajes.dto.interservice.request.InformacionViaje;
 import jakarta.validation.Valid;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;

@@ -1,4 +1,4 @@
-package com.integrador.tpe.msvcviajes.dto.interservice;
+package com.integrador.tpe.msvcviajes.dto.interservice.response;
 
 import com.integrador.tpe.msvcviajes.dto.interservice.utils.EstadoMonopatin;
 import com.integrador.tpe.msvcviajes.dto.interservice.utils.UbicacionGPS;

@@ -84,6 +84,7 @@ public class MonopatinService implements IMonopatinService {
     }
 
     @Override
+    @Transactional
     public void actualizarUbicacionMonopatin(String idMonopatin, UbicacionGPS nuevaUbicacion) {
         ObjectId objectId = new ObjectId(idMonopatin);
         Monopatin monopatin = monopatinRepository.findById(objectId)

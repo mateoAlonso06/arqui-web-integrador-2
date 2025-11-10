@@ -1,11 +1,13 @@
 package com.integrador.tpe.msvcviajes.service.impl;
 
 import com.integrador.tpe.msvcviajes.clients.*;
+import com.integrador.tpe.msvcviajes.dto.interservice.request.ViajeReporteRequestDTO;
+import com.integrador.tpe.msvcviajes.dto.interservice.response.ViajeReporteResponseDTO;
 import com.integrador.tpe.msvcviajes.dto.interservice.utils.EstadoMonopatin;
 import com.integrador.tpe.msvcviajes.dto.interservice.utils.UbicacionGPS;
-import com.integrador.tpe.msvcviajes.dto.response.InformacionViaje;
-import com.integrador.tpe.msvcviajes.dto.interservice.MonopatinResponseDTO;
-import com.integrador.tpe.msvcviajes.dto.interservice.ParadaResponseDTO;
+import com.integrador.tpe.msvcviajes.dto.interservice.request.InformacionViaje;
+import com.integrador.tpe.msvcviajes.dto.interservice.response.MonopatinResponseDTO;
+import com.integrador.tpe.msvcviajes.dto.interservice.response.ParadaResponseDTO;
 import com.integrador.tpe.msvcviajes.dto.request.ViajeRequestDTO;
 import com.integrador.tpe.msvcviajes.dto.response.ViajeResponseDTO;
 import com.integrador.tpe.msvcviajes.entity.Pausa;
@@ -185,5 +187,13 @@ public class ViajeService implements IViajeService {
             return viajeRepository.findAll(pageable)
                     .map(viajeMapper::toResponseDTO);
         }
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<ViajeReporteResponseDTO> findAllViajesHechosPorAnioConCantidadViajesX(ViajeReporteRequestDTO viajeReporteRequestDTO) {
+        int cantidadViajes = viajeReporteRequestDTO.cantidadViajes();
+        int anio = viajeReporteRequestDTO.anio();
+        return viajeRepository.findAllViajesHechosPorAnioConCantidadViajesX(cantidadViajes, anio);
     }
 }

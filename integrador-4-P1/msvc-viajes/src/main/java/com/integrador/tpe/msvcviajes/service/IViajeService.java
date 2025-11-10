@@ -1,11 +1,15 @@
 package com.integrador.tpe.msvcviajes.service;
 
+import com.integrador.tpe.msvcviajes.dto.interservice.request.ViajeReporteRequestDTO;
+import com.integrador.tpe.msvcviajes.dto.interservice.response.ViajeReporteResponseDTO;
 import com.integrador.tpe.msvcviajes.dto.request.ViajeRequestDTO;
 import com.integrador.tpe.msvcviajes.dto.response.ViajeResponseDTO;
+import com.integrador.tpe.msvcviajes.entity.Viaje;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public interface IViajeService {
     ViajeResponseDTO iniciarViaje(ViajeRequestDTO viajeRequestDTO);
@@ -18,4 +22,6 @@ public interface IViajeService {
 
     // opcionalmente filtrar por fecha de viaje
     Page<ViajeResponseDTO> getAllViajes(Pageable pageable, LocalDateTime fecha);
+
+    List<ViajeReporteResponseDTO> findAllViajesHechosPorAnioConCantidadViajesX(ViajeReporteRequestDTO viajeReporteRequestDTO);
 }

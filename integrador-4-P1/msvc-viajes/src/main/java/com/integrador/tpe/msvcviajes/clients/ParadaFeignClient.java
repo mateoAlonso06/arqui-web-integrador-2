@@ -1,6 +1,6 @@
 package com.integrador.tpe.msvcviajes.clients;
 
-import com.integrador.tpe.msvcviajes.dto.interservice.ParadaResponseDTO;
+import com.integrador.tpe.msvcviajes.dto.interservice.response.ParadaResponseDTO;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;

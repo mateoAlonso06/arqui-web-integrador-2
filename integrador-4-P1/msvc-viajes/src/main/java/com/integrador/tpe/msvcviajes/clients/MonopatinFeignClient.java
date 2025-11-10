@@ -1,6 +1,6 @@
 package com.integrador.tpe.msvcviajes.clients;
 
-import com.integrador.tpe.msvcviajes.dto.interservice.MonopatinResponseDTO;
+import com.integrador.tpe.msvcviajes.dto.interservice.response.MonopatinResponseDTO;
 import com.integrador.tpe.msvcviajes.dto.interservice.utils.UbicacionGPS;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
