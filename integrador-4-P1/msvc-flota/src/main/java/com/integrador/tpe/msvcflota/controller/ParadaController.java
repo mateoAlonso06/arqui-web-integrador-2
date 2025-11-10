@@ -5,10 +5,8 @@ import com.integrador.tpe.msvcflota.dto.responses.MonopatinResponseDTO;
 import com.integrador.tpe.msvcflota.dto.responses.ParadaResponseDTO;
 import com.integrador.tpe.msvcflota.service.IParadaService;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
-import org.bson.types.ObjectId;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -26,19 +24,26 @@ public class ParadaController {
     private final IParadaService paradaService;
 
     @GetMapping("/{idParada}/monopatines")
-    public ResponseEntity<Page<MonopatinResponseDTO>> getMonopatinesEnParada(@PathVariable ObjectId idParada, Pageable pageable) {
+    public ResponseEntity<Page<MonopatinResponseDTO>> getMonopatinesEnParada(@PathVariable @NotBlank String idParada, Pageable pageable) {
         Page<MonopatinResponseDTO> monopatines = paradaService.getMonopatinesEnParada(idParada, pageable);
         return ResponseEntity.ok(monopatines);
     }
 
+    @GetMapping
+    public ResponseEntity<Page<ParadaResponseDTO>> getParadas(Pageable pageable) {
+        Page<ParadaResponseDTO> paradas = paradaService.getAllParadas(pageable);
+        return ResponseEntity.ok(paradas);
+    }
+
     @GetMapping("/{id}")
-    public ResponseEntity<ParadaResponseDTO> getParadaById(@PathVariable @Positive @NotNull Long id) {
+    public ResponseEntity<ParadaResponseDTO> getParadaById(@PathVariable @NotBlank String id) {
         ParadaResponseDTO paradaResponseDTO = paradaService.getParadaById(id);
         return ResponseEntity.ok().body(paradaResponseDTO);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteParada(@PathVariable @Positive @NotNull Long id) {
+    public ResponseEntity<Void> deleteParada(@PathVariable @NotBlank String id) {
+        paradaService.deleteParada(id);
         return ResponseEntity.noContent().build();
     }
 
@@ -48,8 +53,8 @@ public class ParadaController {
 
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
-                .path("/api/paradas/{id}")
-                .buildAndExpand()
+                .path("{id}")
+                .buildAndExpand(paradaCreada.id())
                 .toUri();
 
         return ResponseEntity.created(location).body(paradaCreada);

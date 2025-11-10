@@ -1,6 +1,11 @@
 package com.integrador.tpe.msvcflota.dto.responses;
 
-public record ParadaResponseDTO(
+import com.integrador.tpe.msvcflota.entity.UbicacionGPS;
+import org.bson.types.ObjectId;
 
+public record ParadaResponseDTO(
+        String id,
+        UbicacionGPS ubicacionGps,
+        String nombre
 ) {
 }

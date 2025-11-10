@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
@@ -24,7 +25,7 @@ public class Tarifa {
     private TipoTarifa tipoTarifa;
 
     @Column(name = "valor_por_minuto", nullable = false)
-    private Double valorPorMinuto;
+    private BigDecimal valorPorMinuto;
 
     @Column(name = "fecha_vigencia", nullable = false)
     private LocalDateTime fechaVigencia;

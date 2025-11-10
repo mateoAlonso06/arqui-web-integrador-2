@@ -82,4 +82,14 @@ public class UsuarioService implements IUsuarioService {
         Usuario updated = usuarioRepository.save(usuarioToUpdate);
         return usuarioMapper.toResponseDTO(updated);
     }
+
+    @Override
+    public boolean existsUsuarioById(Long id) {
+        return usuarioRepository.existsById(id);
+    }
+
+    @Override
+    public boolean estaAsociadoConCuenta(Long idUsuario, Long idCuenta) {
+        return usuarioRepository.existsByIdAndCuentas_Id(idUsuario, idCuenta);
+    }
 }

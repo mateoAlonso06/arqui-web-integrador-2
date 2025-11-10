@@ -19,9 +19,8 @@ public class Monopatin {
     @Id
     private ObjectId id;
     private UbicacionGPS ubicacionGps;
-    private Double kmRecorridos;
-    private EstadoMonopatin estado;
-    private ParadaInfo paradaInfo;
+    private Double kmRecorridos = 0.0;
+    private EstadoMonopatin estado = EstadoMonopatin.LIBRE;
 
     @Override
     public boolean equals(Object o) {

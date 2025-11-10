@@ -2,7 +2,7 @@ package com.integrador.tpe.msvcviajes.dto.response;
 
 public record ViajeResponseDTO(
     Long id,
-    Long idMonopatin,
+    String idMonopatin,
     Long idCuenta,
     Double kmRecorridos
 ) {

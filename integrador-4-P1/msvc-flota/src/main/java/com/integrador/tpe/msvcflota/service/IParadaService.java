@@ -8,11 +8,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface IParadaService {
-    Page<MonopatinResponseDTO> getMonopatinesEnParada(ObjectId idParada, Pageable pageable);
+    Page<MonopatinResponseDTO> getMonopatinesEnParada(String idParada, Pageable pageable);
 
     ParadaResponseDTO addParada(ParadaRequestDTO paradaRequestDTO);
 
-    void deleteParada(ObjectId id);
+    void deleteParada(String id);
 
-    ParadaResponseDTO getParadaById(ObjectId id);
+    Page<ParadaResponseDTO> getAllParadas(Pageable pageable);
+
+    ParadaResponseDTO getParadaById(String id);
 }

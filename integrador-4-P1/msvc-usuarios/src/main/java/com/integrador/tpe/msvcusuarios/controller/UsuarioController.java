@@ -4,11 +4,13 @@ import com.integrador.tpe.msvcusuarios.dto.request.UsuarioRequestDTO;
 import com.integrador.tpe.msvcusuarios.dto.request.UsuarioUpdateDTO;
 import com.integrador.tpe.msvcusuarios.dto.response.UsuarioResponseDTO;
 import com.integrador.tpe.msvcusuarios.service.IUsuarioService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -16,12 +18,25 @@ import java.net.URI;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("api/usuarios")
+@Validated
+@RequestMapping("/api/usuarios")
 public class UsuarioController {
     private final IUsuarioService usuarioService;
 
+    @GetMapping("/{id}/exists")
+    public ResponseEntity<Boolean> existUsuarioById(@PathVariable Long id) {
+        boolean exists = usuarioService.existsUsuarioById(id);
+        return ResponseEntity.ok(exists);
+    }
+
+    @GetMapping("/{idUsuario}/cuenta/{idCuenta}")
+    public ResponseEntity<Boolean> estaAsociadoConCuenta(@PathVariable Long idUsuario, @PathVariable Long idCuenta) {
+        boolean asociado = usuarioService.estaAsociadoConCuenta(idUsuario, idCuenta);
+        return ResponseEntity.ok(asociado);
+    }
+
     @PostMapping
-    public ResponseEntity<UsuarioResponseDTO> addUsuario(UsuarioRequestDTO usuarioRequestDTO) {
+    public ResponseEntity<UsuarioResponseDTO> addUsuario(@RequestBody @Valid UsuarioRequestDTO usuarioRequestDTO) {
         UsuarioResponseDTO createdUsuario = usuarioService.createUsuario(usuarioRequestDTO);
 
         URI location = ServletUriComponentsBuilder
@@ -34,7 +49,7 @@ public class UsuarioController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<UsuarioResponseDTO> getUsuarioById(Long id) {
+    public ResponseEntity<UsuarioResponseDTO> getUsuarioById(@PathVariable Long id) {
         UsuarioResponseDTO usuarioResponseDTO = usuarioService.getUsuarioById(id);
         return ResponseEntity.ok(usuarioResponseDTO);
     }
@@ -46,13 +61,13 @@ public class UsuarioController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteUsuario(Long id) {
+    public ResponseEntity<Void> deleteUsuario(@PathVariable Long id) {
         usuarioService.deleteUsuario(id);
         return ResponseEntity.noContent().build();
     }
 
-    @PatchMapping("/{id}/")
-    public ResponseEntity<UsuarioResponseDTO> updatePatchUsuario(@PathVariable Long id, @RequestBody UsuarioUpdateDTO usuarioUpdateDTO) {
+    @PatchMapping("/{id}")
+    public ResponseEntity<UsuarioResponseDTO> updatePatchUsuario(@PathVariable Long id, @RequestBody @Valid UsuarioUpdateDTO usuarioUpdateDTO) {
         UsuarioResponseDTO updatedUsuario = usuarioService.updatePatchUsuario(id, usuarioUpdateDTO);
         return ResponseEntity.ok(updatedUsuario);
     }

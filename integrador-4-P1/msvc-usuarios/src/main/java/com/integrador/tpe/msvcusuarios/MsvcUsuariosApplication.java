@@ -7,7 +7,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 
 @SpringBootApplication
 @EnableDiscoveryClient
-@EnableFeignClients
+@EnableFeignClients(basePackages = "com.integrador.tpe.msvcusuarios.clients")
 public class MsvcUsuariosApplication {
 
     public static void main(String[] args) {

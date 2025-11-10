@@ -13,8 +13,7 @@ import java.time.LocalDateTime;
 @Builder
 public class InformacionViaje {
     private Long idViaje;
-    private Long idMonopatin;
-    private Long idUsuario;
+    private String idMonopatin;
     private Long idCuenta;
     private String tipoCuenta;
     private LocalDateTime fechaInicio;

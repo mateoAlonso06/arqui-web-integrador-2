@@ -1,6 +1,8 @@
 package com.integrador.tpe.msvcviajes.service.impl;
 
 import com.integrador.tpe.msvcviajes.clients.*;
+import com.integrador.tpe.msvcviajes.dto.interservice.utils.EstadoMonopatin;
+import com.integrador.tpe.msvcviajes.dto.interservice.utils.UbicacionGPS;
 import com.integrador.tpe.msvcviajes.dto.response.InformacionViaje;
 import com.integrador.tpe.msvcviajes.dto.interservice.MonopatinResponseDTO;
 import com.integrador.tpe.msvcviajes.dto.interservice.ParadaResponseDTO;
@@ -39,21 +41,28 @@ public class ViajeService implements IViajeService {
     @Override
     @Transactional
     public ViajeResponseDTO iniciarViaje(ViajeRequestDTO viajeRequestDTO) {
-        Long idMonopatin = viajeRequestDTO.getIdMonopatin();
+        String idMonopatin = viajeRequestDTO.getIdMonopatin();
+        String idParada = viajeRequestDTO.getIdParada();
         Long idUsuario = viajeRequestDTO.getIdUsuario();
         Long idCuenta = viajeRequestDTO.getIdCuenta();
-        Long idParada = viajeRequestDTO.getIdParada();
 
         ParadaResponseDTO paradaInicio = paradaClient.getParadaById(idParada);
         MonopatinResponseDTO monopatin = monopatinClient.getMonopatinById(idMonopatin);
 
-        if (!monopatin.getUbicacionGPS().equals(paradaInicio.getUbicacionGPS()) && paradaInicio.getId().equals(monopatin.getIdParada()))
+        if (!facturacionClient.activoServicio(idCuenta))
+            throw new IllegalStateException("El servicio de facturación no está activo para la cuenta con id " + idCuenta + ".");
+
+        if (facturacionClient.tieneDeudasPendientes(idCuenta))
+            throw new IllegalStateException("La cuenta con id " + idCuenta + " tiene deudas pendientes.");
+
+        if (!monopatin.getUbicacionGps().equals(paradaInicio.getUbicacionGps()) && paradaInicio.getId().equals(monopatin.getIdParada()))
             throw new IllegalStateException("EL monopatín no se encuentra en la ubicación de la parada.");
 
-        if (!monopatin.getEstado().equals("LIBRE"))
+        if (!monopatin.getEstado().equals(EstadoMonopatin.LIBRE))
             throw new IllegalStateException("El monopatín con id " + idMonopatin + " no está disponible para iniciar un viaje.");
 
-        if (!usuarioClient.existUsuarioById(idUsuario)) // TODO: cuando se implemente JWT quizas haya que borrar esta verifacion
+        // con JWT la informacion la sacamos de ahi
+        if (!usuarioClient.existsUsuarioById(idUsuario))
             throw new UsuarioNotFoundException("El usuario con id " + idUsuario + " no existe.");
 
         if (!cuentaClient.isCuentaHabilitada(idCuenta))
@@ -64,9 +73,6 @@ public class ViajeService implements IViajeService {
 
         if (viajeRepository.existsViajeByIdUsuarioAndFechaFinIsNull(idUsuario))
             throw new IllegalStateException("El usuario con id " + idUsuario + " ya tiene un viaje activo.");
-
-        if (facturacionClient.tieneDeudasPendientes(idCuenta))
-            throw new IllegalStateException("La cuenta con id " + idCuenta + " tiene deudas pendientes.");
 
         monopatinClient.actualizarEstadoMonopatin(idMonopatin, "EN_USO");
 
@@ -84,27 +90,38 @@ public class ViajeService implements IViajeService {
     @Override
     @Transactional
     public void finalizarViaje(Long idViaje, ViajeRequestDTO viajeRequestDTO) {
-        Long idMonopatin = viajeRequestDTO.getIdMonopatin();
+        String idMonopatin = viajeRequestDTO.getIdMonopatin();
+        String idParada = viajeRequestDTO.getIdParada();
         Long idUsuario = viajeRequestDTO.getIdUsuario();
         Long idCuenta = viajeRequestDTO.getIdCuenta();
-        Long idParada = viajeRequestDTO.getIdParada();
 
         Viaje viaje = viajeRepository.findById(idViaje)
                 .orElseThrow(() -> new ViajeNotFoundException("Viaje con id " + idViaje + " no encontrado."));
 
+        ParadaResponseDTO paradaFin = paradaClient.getParadaById(idParada);
+
+        monopatinClient.actualizarUbicacionMonopatin(idMonopatin, paradaFin.getUbicacionGps());
+
+        MonopatinResponseDTO monopatin = monopatinClient.getMonopatinById(idMonopatin);
+
+        System.out.println(monopatin.getUbicacionGps());
+        System.out.println(paradaFin.getUbicacionGps());
+
+        // verificar que a la parada que se llega no sea la misma del comienzo
+        // verificar que kmRecorridos no sea null y sea mayor a 0
+
         if (viaje.getFechaFin() != null)
             throw new IllegalStateException("El viaje con id " + idViaje + " ya ha sido finalizado.");
 
-        ParadaResponseDTO paradaFin = paradaClient.getParadaById(idParada);
-        MonopatinResponseDTO monopatin = monopatinClient.getMonopatinById(idMonopatin);
+        UbicacionGPS ubicacionMonopatin = monopatin.getUbicacionGps();
+        UbicacionGPS ubicacionParadaFin = paradaFin.getUbicacionGps();
 
-        if (monopatin.getUbicacionGPS().equals(paradaFin.getUbicacionGPS()) && paradaFin.getId().equals(monopatin.getIdParada())) {
-            viaje.setFechaFin(LocalDateTime.now());
-            viaje.setKmRecorridos(viajeRequestDTO.getKmRecorridos());
-            viajeRepository.save(viaje); // actualizo el viaje con la fecha de fin
-        } else {
+        if (!ubicacionMonopatin.equals(ubicacionParadaFin))
             throw new IllegalStateException("El monopatín no se encuentra en la ubicación de la parada de finalización.");
-        }
+
+        viaje.setFechaFin(LocalDateTime.now());
+        viaje.setKmRecorridos(viajeRequestDTO.getKmRecorridos());
+        viajeRepository.save(viaje);
 
         List<Viaje> viajes = viajeRepository.findAllByIdUsuario(idUsuario);
 
@@ -114,7 +131,7 @@ public class ViajeService implements IViajeService {
 
         Long duracionViaje = Duration.between(viaje.getFechaInicio(), viaje.getFechaFin()).toMinutes();
 
-        Double tiempoDePausa = 0.0;
+        double tiempoDePausa = 0.0;
         for (Pausa p : viaje.getPausas())
             tiempoDePausa += Duration.between(p.getFechaInicio(), p.getFechaFin()).toMinutes();
 
@@ -124,7 +141,6 @@ public class ViajeService implements IViajeService {
         InformacionViaje info = InformacionViaje.builder()
                 .idViaje(idViaje)
                 .idCuenta(idCuenta)
-                .idUsuario(idUsuario)
                 .idMonopatin(idMonopatin)
                 .fechaInicio(viaje.getFechaInicio())
                 .tipoCuenta(cuentaClient.getTipoCuenta(idCuenta)) // "BASICA" o "PREMIUM"
@@ -133,6 +149,8 @@ public class ViajeService implements IViajeService {
                 .duracionViaje(duracionViaje)
                 .fechaFin(viaje.getFechaFin())
                 .build();
+
+        facturacionClient.generarFactura(idUsuario, info);
     }
 
     @Override
@@ -146,16 +164,17 @@ public class ViajeService implements IViajeService {
     @Override
     @Transactional
     public void deleteViajeById(Long idViaje) {
-        // Van a quedar registros de viajes en facturacion probablemente apuntando hacia viajes que no existen
         if (!viajeRepository.existsById(idViaje)) {
             throw new ViajeNotFoundException("Viaje con id " + idViaje + " no encontrado.");
         }
 
-//      if : existe viaje debo hacer algo con la informacion en las facturaciones
-
         viajeRepository.deleteById(idViaje);
     }
 
+    /***
+     * Si la fecha es null, devuelve todos los viajes paginados.
+     * Si la fecha no es null, devuelve los viajes que comenzaron en esa fecha paginados.
+     */
     @Override
     @Transactional(readOnly = true)
     public Page<ViajeResponseDTO> getAllViajes(Pageable pageable, LocalDateTime fecha) {

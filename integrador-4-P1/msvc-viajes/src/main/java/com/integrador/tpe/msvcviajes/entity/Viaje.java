@@ -21,7 +21,7 @@ public class Viaje {
     private Long id;
 
     @Column(name = "id_monopatin", nullable = false)
-    private Long idMonopatin; // fk a Monopatin
+    private String idMonopatin; // fk a Monopatin
 
     @Column(name = "id_usuario", nullable = false)
     private Long idUsuario; // fk a Usuario

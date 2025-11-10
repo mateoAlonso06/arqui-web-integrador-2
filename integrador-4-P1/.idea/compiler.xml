@@ -15,19 +15,23 @@
         <processorPath useClasspath="false">
           <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.42/lombok-1.18.42.jar" />
           <entry name="$MAVEN_REPOSITORY$/org/mapstruct/mapstruct-processor/1.6.3/mapstruct-processor-1.6.3.jar" />
+          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.42/lombok-1.18.42.jar" />
+          <entry name="$MAVEN_REPOSITORY$/org/mapstruct/mapstruct-processor/1.6.3/mapstruct-processor-1.6.3.jar" />
         </processorPath>
         <module name="msvc-viajes" />
         <module name="msvc-facturacion" />
         <module name="msvc-gateway" />
         <module name="msvc-eureka" />
         <module name="msvc-usuarios" />
-        <module name="msvc-mantenimiento" />
         <module name="msvc-reportes" />
         <module name="msvc-config" />
         <module name="msvc-flota" />
         <module name="msvc-tarifas" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="msvc-mantenimiento" target="21" />
+    </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">

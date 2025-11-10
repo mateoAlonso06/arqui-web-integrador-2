@@ -21,4 +21,8 @@ public interface ICuentaService {
     void asociarUsuarioACuenta(Long cuentaId, Long usuarioId);
 
     void removerUsuarioDeCuenta(Long idCuenta, Long idUsuario);
+
+    boolean isCuentaHabilitada(Long id);
+
+    String getTipoCuenta(Long id);
 }

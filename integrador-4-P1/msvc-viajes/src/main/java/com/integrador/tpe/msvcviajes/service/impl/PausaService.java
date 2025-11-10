@@ -25,9 +25,14 @@ public class PausaService implements IPausaService {
         Viaje viaje = viajeRepository.findById(idViaje)
                 .orElseThrow(() -> new ViajeNotFoundException("Viaje no encontrado con id: " + idViaje));
 
+        // No causa demasiado costo extra en comparacion de comprobarlo en la DB
+        boolean existePausaActiva = viaje.getPausas()
+                                    .stream()
+                                    .anyMatch(p -> p.getFechaFin() == null);
+
         Pausa pausa = Pausa.builder()
-                .viaje(viaje)
-                .build();
+                    .viaje(viaje)
+                    .build();
 
         viaje.getPausas().add(pausa);
         pausaRepository.save(pausa);

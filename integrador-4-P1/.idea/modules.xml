@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/msvc-facturacion/msvc-facturacion.iml" filepath="$PROJECT_DIR$/msvc-facturacion/msvc-facturacion.iml" />
       <module fileurl="file://$PROJECT_DIR$/msvc-usuarios/msvc-usuarios.iml" filepath="$PROJECT_DIR$/msvc-usuarios/msvc-usuarios.iml" />
       <module fileurl="file://$PROJECT_DIR$/msvc-viajes/msvc-viajes.iml" filepath="$PROJECT_DIR$/msvc-viajes/msvc-viajes.iml" />
     </modules>

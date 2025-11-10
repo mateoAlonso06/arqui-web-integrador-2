@@ -7,7 +7,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 
 @SpringBootApplication
 @EnableDiscoveryClient
-@EnableFeignClients
+@EnableFeignClients(basePackages = "com.integrador.tpe.msvcflota.clients")
 public class MsvcFlotaApplication {
 
     public static void main(String[] args) {

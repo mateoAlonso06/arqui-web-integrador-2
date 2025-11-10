@@ -9,6 +9,6 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class ParadaResponseDTO {
-    private Long id;
-    private UbicacionGPS ubicacionGPS;
+    private String id;
+    private UbicacionGPS ubicacionGps;
 }

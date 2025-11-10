@@ -16,4 +16,8 @@ public interface IUsuarioService {
     void deleteUsuario(Long id);
 
     UsuarioResponseDTO updatePatchUsuario(Long id, UsuarioUpdateDTO usuarioUpdateDTO);
+
+    boolean existsUsuarioById(Long id);
+
+    boolean estaAsociadoConCuenta(Long idUsuario, Long idCuenta);
 }

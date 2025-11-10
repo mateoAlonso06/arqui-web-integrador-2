@@ -110,7 +110,7 @@ public class CuentaService implements ICuentaService {
             Cuenta cuentaActualizada = cuentaRepository.save(cuenta);
             return cuentaMapper.toResponse(cuentaActualizada);
         } else {
-            return cuentaMapper.toResponse(cuenta);
+            throw new IllegalArgumentException("La cuenta ya se encuentra habilitada");
         }
     }
 
@@ -132,7 +132,7 @@ public class CuentaService implements ICuentaService {
             Cuenta cuentaActualizada = cuentaRepository.save(cuenta);
             return cuentaMapper.toResponse(cuentaActualizada);
         } else {
-            return cuentaMapper.toResponse(cuenta);
+            throw new IllegalArgumentException("La cuenta ya se encuentra deshabilitada");
         }
     }
 
@@ -156,15 +156,29 @@ public class CuentaService implements ICuentaService {
     @Override
     @Transactional
     public void removerUsuarioDeCuenta(Long idCuenta, Long idUsuario) {
-        if (!cuentaRepository.existeAsociacionCuentaUsuario(idCuenta, idUsuario))
-            throw new IllegalArgumentException("La cuenta con ID: " + idCuenta + " ya está asociada al usuario con ID: " + idUsuario);
-
         Cuenta cuenta = cuentaRepository.findById(idCuenta)
                 .orElseThrow(() -> new CuentaNotFoundException("No existe cuenta con ID: " + idCuenta));
         Usuario usuario = usuarioRepository.findById(idUsuario)
                 .orElseThrow(() -> new UsuarioNotFoundException("No existe usuario con ID: " + idUsuario));
 
+        if (!cuentaRepository.existeAsociacionCuentaUsuario(idCuenta, idUsuario))
+            throw new IllegalArgumentException("La cuenta con ID: " + idCuenta + " ya está asociada al usuario con ID: " + idUsuario);
+
         cuenta.removeUsuario(usuario); // internamente sincroniza ambas colecciones en memoria
         cuentaRepository.save(cuenta);
+    }
+
+    @Override
+    public boolean isCuentaHabilitada(Long id) {
+        Cuenta cuenta = cuentaRepository.findById(id)
+                .orElseThrow(() -> new CuentaNotFoundException("No existe cuenta con ID: " + id));
+        return cuenta.isCuentaHabilitada();
+    }
+
+    @Override
+    public String getTipoCuenta(Long id) {
+        Cuenta cuenta = cuentaRepository.findById(id)
+                .orElseThrow(() -> new CuentaNotFoundException("No existe cuenta con ID: " + id));
+        return cuenta.getTipoCuenta().toString();
     }
 }

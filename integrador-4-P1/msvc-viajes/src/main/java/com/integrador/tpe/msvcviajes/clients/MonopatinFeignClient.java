@@ -1,20 +1,21 @@
 package com.integrador.tpe.msvcviajes.clients;
 
 import com.integrador.tpe.msvcviajes.dto.interservice.MonopatinResponseDTO;
+import com.integrador.tpe.msvcviajes.dto.interservice.utils.UbicacionGPS;
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
 
-@FeignClient(name = "msvc-flota", path = "/monopatines")
+@FeignClient(name = "msvc-flota", path = "api/monopatines")
 public interface MonopatinFeignClient {
     @GetMapping("/{idMonopatin}")
-    MonopatinResponseDTO getMonopatinById(@PathVariable Long idMonopatin);
+    MonopatinResponseDTO getMonopatinById(@PathVariable String idMonopatin);
 
-    @GetMapping("/{id}/estado")
-    void actualizarEstadoMonopatin(@PathVariable Long id, @RequestBody String estado);
+    @PutMapping("/{idMonopatin}/estado")
+    void actualizarEstadoMonopatin(@PathVariable String idMonopatin, @RequestBody String estado);
 
-    @PatchMapping("/{idMonopatin}/recorrido")
-    void actualizarRecorridoMonopatin(@PathVariable Long idMonopatin, @RequestBody Double kmRecorridos);
+    @PutMapping("/{idMonopatin}/recorrido")
+    void actualizarRecorridoMonopatin(@PathVariable String idMonopatin, @RequestBody Double kmRecorridos);
+
+    @PutMapping("/{idMonopatin}/ubicacion")
+    void actualizarUbicacionMonopatin(@PathVariable String idMonopatin, @RequestBody UbicacionGPS nuevaUbicacion);
 }

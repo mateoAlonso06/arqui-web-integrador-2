@@ -1,0 +1,29 @@
+// Puerto Madero
+UbicacionGPS puertoMadero = new UbicacionGPS(-34.6101, -58.3631);
+
+// Palermo
+UbicacionGPS palermo = new UbicacionGPS(-34.5755, -58.4338);
+
+// Recoleta
+UbicacionGPS recoleta = new UbicacionGPS(-34.5875, -58.3974);
+
+// San Telmo
+UbicacionGPS sanTelmo = new UbicacionGPS(-34.6213, -58.3731);
+
+// La Boca
+UbicacionGPS laBoca = new UbicacionGPS(-34.6345, -58.3634);
+
+// Belgrano
+UbicacionGPS belgrano = new UbicacionGPS(-34.5633, -58.4578);
+
+// Villa Creso
+UbicacionGPS villaCrespo = new UbicacionGPS(-34.5998, -58.4387);
+
+// Caballito
+UbicacionGPS caballito = new UbicacionGPS(-34.6208, -58.4370);
+
+// Microcentro
+UbicacionGPS microcentro = new UbicacionGPS(-34.6037, -58.3816);
+
+// Barracas
+UbicacionGPS barracas = new UbicacionGPS(-34.6483, -58.3689);

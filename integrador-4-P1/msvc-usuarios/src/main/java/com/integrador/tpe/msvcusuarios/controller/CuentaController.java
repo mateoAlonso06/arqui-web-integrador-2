@@ -17,17 +17,28 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.net.URI;
 
 @RestController
-@RequiredArgsConstructor
 @Validated
+@RequiredArgsConstructor
 @RequestMapping("/api/cuentas")
 public class CuentaController {
     private final ICuentaService cuentaService;
 
+    @GetMapping("/{id}/estado")
+    public ResponseEntity<Boolean> isCuentaHabilitada(@PathVariable @Positive @NotNull Long id) {
+        boolean habilitado = cuentaService.isCuentaHabilitada(id);
+        return ResponseEntity.ok().body(habilitado);
+    }
+
+    @GetMapping("/{id}/tipo")
+    public ResponseEntity<String> getTipoCuenta(@PathVariable @Positive @NotNull Long id) {
+        String tipoCuenta = cuentaService.getTipoCuenta(id);
+        return ResponseEntity.ok().body(tipoCuenta);
+    }
+
     @GetMapping
     public ResponseEntity<Page<CuentaResponseDTO>> getAllCuentas(
-            @RequestParam(required = false, defaultValue = "true") Boolean habilitado, Pageable pageable) {
+            @RequestParam(required = false, defaultValue = "true") boolean habilitado, Pageable pageable) {
         Page<CuentaResponseDTO> cuentas = cuentaService.getAllCuentas(habilitado, pageable);
-
         return ResponseEntity.ok().body(cuentas);
     }
 

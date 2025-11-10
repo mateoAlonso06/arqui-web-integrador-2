@@ -31,7 +31,6 @@
         <module>msvc-tarifas</module>
         <module>msvc-reportes</module>
         <module>msvc-facturacion</module>
-        <module>msvc-mantenimiento</module>
         <module>msvc-eureka</module>
         <module>msvc-config</module>
         <module>msvc-gateway</module>

@@ -15,6 +15,10 @@ spring:
     database: mysql
     show-sql: true
     database-platform: org.hibernate.dialect.MySQLDialect
+  cloud:
+    openfeign:
+      httpclient:
+        enabled: true
 
 eureka:
   instance:

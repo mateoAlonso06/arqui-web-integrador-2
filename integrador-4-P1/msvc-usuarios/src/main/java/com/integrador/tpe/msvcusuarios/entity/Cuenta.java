@@ -35,7 +35,7 @@ public class Cuenta {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "tipo_cuenta", nullable = false, columnDefinition = "varchar(20) default 'BASICA'")
-    private TipoCuenta tipoCuenta;
+    private TipoCuenta tipoCuenta = TipoCuenta.BASICA;
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = {
             CascadeType.MERGE,

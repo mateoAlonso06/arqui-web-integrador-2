@@ -7,5 +7,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ParadaRepository extends MongoRepository<Parada, ObjectId> {
-    boolean existById(ObjectId idParada);
+    boolean existsById(ObjectId idParada);
+
+    boolean existsByUbicacionGps_LatitudAndUbicacionGps_Longitud(Double ubicacionGpsLatitud, Double ubicacionGpsLongitud);
 }

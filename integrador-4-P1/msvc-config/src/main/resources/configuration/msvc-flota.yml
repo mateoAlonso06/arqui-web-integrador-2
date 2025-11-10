@@ -6,7 +6,11 @@ spring:
     name: msvc-flota
   data:
     mongodb:
-      uri: mongodb://mateo:secret123@localhost:27017/msvc_flota?authSource=admin
+      uri: mongodb://mateo:secret@localhost:27017/msvc-flota?authSource=admin
+  cloud:
+    openfeign:
+      httpclient:
+        enabled: true
 
 eureka:
   instance:

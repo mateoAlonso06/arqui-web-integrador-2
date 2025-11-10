@@ -10,10 +10,10 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class MonopatinResponseDTO {
-    private Long id;
-    private UbicacionGPS ubicacionGPS; // TODO: descomponer objeto si sobra tiempo
+    private String id;
+    private UbicacionGPS ubicacionGps; // TODO: descomponer objeto si sobra tiempo
     private Double kmRecorridos;
     private EstadoMonopatin estado;
-    private Long idParada;
+    private String idParada;
     private String nombreParada;
 }
