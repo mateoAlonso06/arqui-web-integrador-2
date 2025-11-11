@@ -1,5 +1,6 @@
 package com.integrador.tpe.msvctarifas.service.impl;
 
+import com.integrador.tpe.msvctarifas.clients.UsuarioFeignClients;
 import com.integrador.tpe.msvctarifas.dto.request.TarifaRequestDTO;
 import com.integrador.tpe.msvctarifas.dto.response.EnviarTarifas;
 import com.integrador.tpe.msvctarifas.dto.response.TarifaResponseDTO;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -22,6 +24,7 @@ import java.util.List;
 public class TarifaService implements ITarifaService {
     private final TarifaRepository tarifaRepository;
     private final TarifaMapper tarifaMapper;
+    private final UsuarioFeignClients usuarioClient;
 
     @Override
     @Transactional(readOnly = true)
@@ -74,20 +77,27 @@ public class TarifaService implements ITarifaService {
 
     @Override
     @Transactional
-    public TarifaResponseDTO updateTarifa(Long id, TarifaRequestDTO tarifaRequestDTO) {
+    public TarifaResponseDTO updateTarifa(Long id, TarifaRequestDTO tarifaRequestDTO, Long idAdmin) {
+        if (!isAdmin(idAdmin))
+            throw new RuntimeException("Usuario no autorizado para realizar esta acción.");
+
         Tarifa existingTarifa = tarifaRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Tarifa not found with id: " + id));
 
-        if (tarifaRequestDTO.tipoTarifa() != null)
-            existingTarifa.setTipoTarifa(tarifaRequestDTO.tipoTarifa());
+        existingTarifa.setTipoTarifa(tarifaRequestDTO.tipoTarifa());
+        existingTarifa.setValorPorMinuto(tarifaRequestDTO.valorPorMinuto());
 
-        if (tarifaRequestDTO.valorPorMinuto() != null)
-            existingTarifa.setValorPorMinuto(tarifaRequestDTO.valorPorMinuto());
+        LocalDateTime fechaVigencia = tarifaRequestDTO.fechaVigencia();
 
-        if (tarifaRequestDTO.fechaVigencia() != null)
-            existingTarifa.setFechaVigencia(tarifaRequestDTO.fechaVigencia());
+        if (fechaVigencia.isBefore(existingTarifa.getFechaVigencia()))
+            throw new RuntimeException("La nueva fecha de vigencia no puede ser anterior a la fecha actual.");
 
+        existingTarifa.setFechaVigencia(fechaVigencia);
         Tarifa updatedTarifa = tarifaRepository.save(existingTarifa);
         return tarifaMapper.toResponseDTO(updatedTarifa);
+    }
+
+    private boolean isAdmin(Long idAdmin) {
+        return usuarioClient.isAdmin(idAdmin);
     }
 }

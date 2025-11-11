@@ -61,10 +61,11 @@ public class TarifaController {
         return ResponseEntity.noContent().build();
     }
 
-    @PatchMapping("/{id}")
+    @PutMapping("/{id}/admin/{idAdmin}")
     public ResponseEntity<TarifaResponseDTO> updateTarifa(@PathVariable @Positive @NotNull Long id,
-                                                          @RequestBody @Valid TarifaRequestDTO tarifaRequestDTO) {
-        TarifaResponseDTO tarifa = tarifaService.updateTarifa(id, tarifaRequestDTO);
+                                                          @RequestBody @Valid TarifaRequestDTO tarifaRequestDTO,
+                                                          @PathVariable @NotNull @Positive Long idAdmin) {
+        TarifaResponseDTO tarifa = tarifaService.updateTarifa(id, tarifaRequestDTO, idAdmin);
         return ResponseEntity.ok().body(tarifa);
     }
 }

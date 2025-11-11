@@ -1,5 +1,6 @@
 package com.integrador.tpe.msvcflota.repository;
 
+import com.integrador.tpe.msvcflota.entity.EstadoMonopatin;
 import com.integrador.tpe.msvcflota.entity.Monopatin;
 import com.integrador.tpe.msvcflota.entity.UbicacionGPS;
 import org.bson.types.ObjectId;
@@ -10,7 +11,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface MonopatinRepository extends MongoRepository<Monopatin, ObjectId> {
-    Page<Monopatin> findAllByUbicacionGps(UbicacionGPS ubicacionGps, Pageable pageable);
-
-    ObjectId id(ObjectId id);
+    Page<Monopatin> findAllByUbicacionGpsAndEstado(UbicacionGPS ubicacionGps, EstadoMonopatin estadoMonopatin, Pageable pageable);
 }

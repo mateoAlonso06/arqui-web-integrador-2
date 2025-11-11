@@ -5,14 +5,15 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.io.Serializable;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
-public class ViajeReporteResponseDTO implements Serializable {
-    private String idMonopatin;
-    private Integer cantidadViajes;
+@NoArgsConstructor
+public class ReporteConsumoPersonalServicio {
+    private Double cantidadHorasServicio;
     private Double kmRecorridos;
+    private LocalDateTime periodoInicio;
+    private LocalDateTime periodoFin;
 }

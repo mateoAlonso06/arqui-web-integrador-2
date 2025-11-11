@@ -1,7 +1,12 @@
 package com.integrador.tpe.msvcviajes.controller;
 
+import com.integrador.tpe.msvcviajes.dto.interservice.request.FechasFiltroDTO;
+import com.integrador.tpe.msvcviajes.dto.interservice.request.UsuarioBusquedaDTO;
 import com.integrador.tpe.msvcviajes.dto.interservice.request.ViajeReporteRequestDTO;
-import com.integrador.tpe.msvcviajes.dto.interservice.response.ViajeReporteResponseDTO;
+import com.integrador.tpe.msvcviajes.dto.interservice.response.ReporteConsumoPersonalServicio;
+import com.integrador.tpe.msvcviajes.dto.interservice.response.ReporteUsoMonopatines;
+import com.integrador.tpe.msvcviajes.dto.interservice.response.UsuarioResponseDTO;
+import com.integrador.tpe.msvcviajes.dto.response.ViajeReporteResponseDTO;
 import com.integrador.tpe.msvcviajes.dto.request.ViajeRequestDTO;
 import com.integrador.tpe.msvcviajes.dto.response.ViajeResponseDTO;
 import com.integrador.tpe.msvcviajes.service.IViajeService;
@@ -21,7 +26,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/viajes")
+@RequestMapping("api/viajes")
 public class ViajeController {
     private final IViajeService viajeService;
 
@@ -64,9 +69,28 @@ public class ViajeController {
         return ResponseEntity.ok(viajes);
     }
 
-    @GetMapping("/monopatines/reporte")
-    public ResponseEntity<List<ViajeReporteResponseDTO>> getAllViajesHechosPorAnioConCantidadViajesX(@RequestBody @Valid ViajeReporteRequestDTO viajeReporteRequestDTO) {
+    @GetMapping("/monopatines/reporte/cantidad-viajes")
+    public ResponseEntity<List<ViajeReporteResponseDTO>> getAllViajesHechosPorAnioConCantidadViajesX(@ModelAttribute ViajeReporteRequestDTO viajeReporteRequestDTO) {
         List<ViajeReporteResponseDTO> viajes = viajeService.findAllViajesHechosPorAnioConCantidadViajesX(viajeReporteRequestDTO);
         return ResponseEntity.ok().body(viajes);
+    }
+
+    @GetMapping("/usuarios/reporte/usuarios-top-uso")
+    public ResponseEntity<List<UsuarioResponseDTO>> getTopUsuariosPorUso(@ModelAttribute UsuarioBusquedaDTO usuarioBusquedaDTO) {
+        List<UsuarioResponseDTO> viajes = viajeService.findTopUsuariosPorUso(usuarioBusquedaDTO);
+        return ResponseEntity.ok().body(viajes);
+    }
+
+
+    @GetMapping("/monopatines/uso/reporte") // Lo usa usuarios
+    public ResponseEntity<List<ReporteUsoMonopatines>> generarReporteUsoMonopatines(@RequestParam(required = false, defaultValue = "false") boolean incluyePausa) {
+        List<ReporteUsoMonopatines> reporte = viajeService.generarReporteUsoMonopatines(incluyePausa);
+        return ResponseEntity.ok(reporte);
+    }
+
+    @GetMapping("/servicios/consumo/{idUsuario}/reporte") // Lo usa usuarios
+    public ResponseEntity<ReporteConsumoPersonalServicio> generarReporteConsumoPersonalServicio(@PathVariable @NotNull @Positive Long idUsuario, @RequestBody @Valid FechasFiltroDTO fechasFiltro) {
+        ReporteConsumoPersonalServicio reporte = viajeService.generarReporteConsumoPersonalServicio(idUsuario, fechasFiltro.fechaInicio(), fechasFiltro.fechaFin());
+        return ResponseEntity.ok().body(reporte);
     }
 }

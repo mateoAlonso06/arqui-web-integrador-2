@@ -9,11 +9,11 @@ import com.integrador.tpe.msvcfacturacion.repository.TransaccionRepository;
 import com.integrador.tpe.msvcfacturacion.service.ITransaccionService;
 import com.integrador.tpe.msvcfacturacion.specification.TransaccionSpecification;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -39,8 +39,11 @@ public class TransaccionService implements ITransaccionService {
 
     @Override
     @Transactional(readOnly = true)
-    public Page<TransaccionResponseDTO> getTransacciones(TransaccionFiltroDTO transaccionFiltroDTO, Pageable pageable) {
+    public List<TransaccionResponseDTO> getTransacciones(TransaccionFiltroDTO transaccionFiltroDTO) {
         Specification<Transaccion> spec = TransaccionSpecification.build(transaccionFiltroDTO);
-        return transaccionRepository.findAll(spec, pageable).map(transaccionMapper::toResponseDTO);
+        return transaccionRepository.findAll(spec)
+                .stream()
+                .map(transaccionMapper::toResponseDTO)
+                .toList();
     }
 }

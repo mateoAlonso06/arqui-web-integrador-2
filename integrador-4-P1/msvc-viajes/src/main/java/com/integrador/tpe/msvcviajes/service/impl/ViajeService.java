@@ -1,14 +1,14 @@
 package com.integrador.tpe.msvcviajes.service.impl;
 
 import com.integrador.tpe.msvcviajes.clients.*;
+import com.integrador.tpe.msvcviajes.dto.interservice.request.InformacionViaje;
+import com.integrador.tpe.msvcviajes.dto.interservice.request.UsuarioBusquedaDTO;
 import com.integrador.tpe.msvcviajes.dto.interservice.request.ViajeReporteRequestDTO;
-import com.integrador.tpe.msvcviajes.dto.interservice.response.ViajeReporteResponseDTO;
+import com.integrador.tpe.msvcviajes.dto.interservice.response.*;
 import com.integrador.tpe.msvcviajes.dto.interservice.utils.EstadoMonopatin;
 import com.integrador.tpe.msvcviajes.dto.interservice.utils.UbicacionGPS;
-import com.integrador.tpe.msvcviajes.dto.interservice.request.InformacionViaje;
-import com.integrador.tpe.msvcviajes.dto.interservice.response.MonopatinResponseDTO;
-import com.integrador.tpe.msvcviajes.dto.interservice.response.ParadaResponseDTO;
 import com.integrador.tpe.msvcviajes.dto.request.ViajeRequestDTO;
+import com.integrador.tpe.msvcviajes.dto.response.ViajeReporteResponseDTO;
 import com.integrador.tpe.msvcviajes.dto.response.ViajeResponseDTO;
 import com.integrador.tpe.msvcviajes.entity.Pausa;
 import com.integrador.tpe.msvcviajes.entity.Viaje;
@@ -50,6 +50,7 @@ public class ViajeService implements IViajeService {
 
         ParadaResponseDTO paradaInicio = paradaClient.getParadaById(idParada);
         MonopatinResponseDTO monopatin = monopatinClient.getMonopatinById(idMonopatin);
+        CuentaResponseDTO cuenta = cuentaClient.obtenerCuentaPorId(idCuenta);
 
         if (!facturacionClient.activoServicio(idCuenta))
             throw new IllegalStateException("El servicio de facturación no está activo para la cuenta con id " + idCuenta + ".");
@@ -67,7 +68,7 @@ public class ViajeService implements IViajeService {
         if (!usuarioClient.existsUsuarioById(idUsuario))
             throw new UsuarioNotFoundException("El usuario con id " + idUsuario + " no existe.");
 
-        if (!cuentaClient.isCuentaHabilitada(idCuenta))
+        if (!cuenta.estadoCuenta())
             throw new IllegalStateException("La cuenta con id " + idCuenta + " no está habilitada.");
 
         if (!usuarioClient.estaAsociadoConCuenta(idUsuario, idCuenta))
@@ -82,6 +83,7 @@ public class ViajeService implements IViajeService {
                 .idMonopatin(idMonopatin)
                 .idUsuario(idUsuario)
                 .idCuenta(idCuenta)
+                .tipoCuenta(cuenta.tipoCuenta())
                 .fechaInicio(LocalDateTime.now())
                 .build();
 
@@ -106,11 +108,9 @@ public class ViajeService implements IViajeService {
 
         MonopatinResponseDTO monopatin = monopatinClient.getMonopatinById(idMonopatin);
 
-        System.out.println(monopatin.getUbicacionGps());
-        System.out.println(paradaFin.getUbicacionGps());
 
-        // verificar que a la parada que se llega no sea la misma del comienzo
-        // verificar que kmRecorridos no sea null y sea mayor a 0
+        if (viajeRequestDTO.getKmRecorridos()==null)
+            throw new IllegalStateException("Los kilómetros recorridos no pueden ser nulos al finalizar el viaje.");
 
         if (viaje.getFechaFin() != null)
             throw new IllegalStateException("El viaje con id " + idViaje + " ya ha sido finalizado.");
@@ -121,6 +121,7 @@ public class ViajeService implements IViajeService {
         if (!ubicacionMonopatin.equals(ubicacionParadaFin))
             throw new IllegalStateException("El monopatín no se encuentra en la ubicación de la parada de finalización.");
 
+        // Establecemos fin del viaje
         viaje.setFechaFin(LocalDateTime.now());
         viaje.setKmRecorridos(viajeRequestDTO.getKmRecorridos());
         viajeRepository.save(viaje);
@@ -169,7 +170,6 @@ public class ViajeService implements IViajeService {
         if (!viajeRepository.existsById(idViaje)) {
             throw new ViajeNotFoundException("Viaje con id " + idViaje + " no encontrado.");
         }
-
         viajeRepository.deleteById(idViaje);
     }
 
@@ -192,8 +192,35 @@ public class ViajeService implements IViajeService {
     @Override
     @Transactional(readOnly = true)
     public List<ViajeReporteResponseDTO> findAllViajesHechosPorAnioConCantidadViajesX(ViajeReporteRequestDTO viajeReporteRequestDTO) {
-        int cantidadViajes = viajeReporteRequestDTO.cantidadViajes();
-        int anio = viajeReporteRequestDTO.anio();
-        return viajeRepository.findAllViajesHechosPorAnioConCantidadViajesX(cantidadViajes, anio);
+        Integer cantidadViajes = viajeReporteRequestDTO.cantidadViajes();
+        Integer anio = viajeReporteRequestDTO.anio();
+
+        List<ViajeReporteResponseDTO> viajes = viajeRepository.findAllViajesHechosPorAnioConCantidadViajesX(cantidadViajes, anio);
+        return viajes;
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<UsuarioResponseDTO> findTopUsuariosPorUso(UsuarioBusquedaDTO usuarioBusquedaDTO) {
+        LocalDateTime fechaInicio = usuarioBusquedaDTO.fechaInicio();
+        LocalDateTime fechaFin = usuarioBusquedaDTO.fechaFin();
+        String tipoCuenta = usuarioBusquedaDTO.tipoCuenta().toString();
+
+        return viajeRepository.findAllUsuariosTop(fechaInicio, fechaFin, tipoCuenta);
+    }
+
+    @Override
+    @Transactional(readOnly = true) // INCISO A
+    public List<ReporteUsoMonopatines> generarReporteUsoMonopatines(boolean incluyePausa) {
+        if (incluyePausa)
+            return viajeRepository.generarReporteUsoMonopatinesConPausa();
+
+        return viajeRepository.generarReporteUsoMonopatinesSinPausa();
+    }
+
+    @Override
+    @Transactional(readOnly = true) // INCISO H
+    public ReporteConsumoPersonalServicio generarReporteConsumoPersonalServicio(Long idUsuario, LocalDateTime fechaInicio, LocalDateTime fechaFin) {
+        return viajeRepository.generarReporteConsumoPersonalServicio(idUsuario, fechaInicio, fechaFin);
     }
 }

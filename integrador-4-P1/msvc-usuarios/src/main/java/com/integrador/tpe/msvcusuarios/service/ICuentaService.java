@@ -14,9 +14,9 @@ public interface ICuentaService {
 
     CuentaResponseDTO createCuenta(CuentaRequestDTO cuentaCreateDTO);
 
-    CuentaResponseDTO habilitarCuenta(Long id);
+    CuentaResponseDTO habilitarCuenta(Long id, Long idAdmin);
 
-    CuentaResponseDTO deshabilitarCuenta(Long id);
+    CuentaResponseDTO deshabilitarCuenta(Long id, Long idAdmin);
 
     void asociarUsuarioACuenta(Long cuentaId, Long usuarioId);
 

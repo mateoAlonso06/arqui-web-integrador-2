@@ -63,6 +63,7 @@ public class MonopatinService implements IMonopatinService {
     }
 
     @Override
+    @Transactional
     public void actualizarEstadoMonopatin(String idMonopatin, String estado) {
         Monopatin monopatin = monopatinRepository.findById(new ObjectId(idMonopatin))
                 .orElseThrow(() -> new MonopatinNotFoundException("No existe monopatín con ID: " + idMonopatin));
@@ -72,6 +73,37 @@ public class MonopatinService implements IMonopatinService {
     }
 
     @Override
+    @Transactional(readOnly = true)
+    public boolean verificarExistenciaMonopatin(String idMonopatin) {
+        ObjectId objectId = new ObjectId(idMonopatin);
+        if (!monopatinRepository.existsById(objectId))
+            throw new MonopatinNotFoundException("No existe monopatín con ID: " + idMonopatin);
+
+        return true;
+    }
+
+    @Override
+    @Transactional
+    public void deshabilitarMonopatin(String idMonopatin) {
+        Monopatin monopatin = monopatinRepository.findById(new ObjectId(idMonopatin))
+                .orElseThrow(() -> new MonopatinNotFoundException("No existe monopatín con ID: " + idMonopatin));
+
+        monopatin.setEstado(EstadoMonopatin.MANTENIMIENTO);
+        monopatinRepository.save(monopatin);
+    }
+
+    @Override
+    @Transactional
+    public void habilitarMonopatin(String idMonopatin) {
+        Monopatin monopatin = monopatinRepository.findById(new ObjectId(idMonopatin))
+                .orElseThrow(() -> new MonopatinNotFoundException("No existe monopatín con ID: " + idMonopatin));
+
+        monopatin.setEstado(EstadoMonopatin.EN_USO);
+        monopatinRepository.save(monopatin);
+    }
+
+    @Override
+    @Transactional
     public void actualizarRecorridoMonopatin(String idMonopatin, Double kmRecorridos) {
         Monopatin monopatin = monopatinRepository.findById(new ObjectId(idMonopatin))
                 .orElseThrow(() -> new MonopatinNotFoundException("No existe monopatín con ID: " + idMonopatin));

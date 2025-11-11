@@ -103,7 +103,6 @@ public class FacturacionService implements IFacturacionService {
 
     @Override
     public boolean tieneDeudasPendientes(Long idCuenta) {
-        // podria devolver una excepcion
         return cuentaCorrienteRepository.existsByIdCuentaAndSaldoActualLessThanEqual(idCuenta, BigDecimal.ZERO);
     }
 

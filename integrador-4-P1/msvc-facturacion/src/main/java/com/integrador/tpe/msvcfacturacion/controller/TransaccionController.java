@@ -4,15 +4,21 @@ import com.integrador.tpe.msvcfacturacion.dto.response.TransaccionResponseDTO;
 import com.integrador.tpe.msvcfacturacion.dto.utils.TransaccionFiltroDTO;
 import com.integrador.tpe.msvcfacturacion.service.ITransaccionService;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
+@Validated
 @RequestMapping("api/transacciones")
 public class TransaccionController {
     private final ITransaccionService transaccionService;
@@ -29,9 +35,9 @@ public class TransaccionController {
         return ResponseEntity.ok(transaccion);
     }
 
-    @GetMapping
-    public ResponseEntity<Page<TransaccionResponseDTO>> getAllTransacciones(@RequestBody(required = false) TransaccionFiltroDTO transaccionFiltroDTO, Pageable pageable) {
-        Page<TransaccionResponseDTO> transacciones = transaccionService.getTransacciones(transaccionFiltroDTO, pageable);
+    @GetMapping("/facturado")
+    public ResponseEntity<List<TransaccionResponseDTO>> getAllTransacciones(@ModelAttribute TransaccionFiltroDTO transaccionFiltroDTO) {
+        List<TransaccionResponseDTO> transacciones = transaccionService.getTransacciones(transaccionFiltroDTO);
         return ResponseEntity.ok().body(transacciones);
     }
 }

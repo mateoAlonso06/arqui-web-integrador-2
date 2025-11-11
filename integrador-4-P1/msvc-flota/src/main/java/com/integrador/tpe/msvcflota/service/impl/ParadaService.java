@@ -3,6 +3,7 @@ package com.integrador.tpe.msvcflota.service.impl;
 import com.integrador.tpe.msvcflota.dto.request.ParadaRequestDTO;
 import com.integrador.tpe.msvcflota.dto.responses.MonopatinResponseDTO;
 import com.integrador.tpe.msvcflota.dto.responses.ParadaResponseDTO;
+import com.integrador.tpe.msvcflota.entity.EstadoMonopatin;
 import com.integrador.tpe.msvcflota.entity.Monopatin;
 import com.integrador.tpe.msvcflota.entity.Parada;
 import com.integrador.tpe.msvcflota.entity.UbicacionGPS;
@@ -34,7 +35,7 @@ public class ParadaService implements IParadaService {
         Parada parada = paradaRepository.findById(objectId)
                 .orElseThrow(() -> new ParadaNotFoundException("No existe parada con ID: " + idParada));
 
-        Page<Monopatin> monopatines = monopatinRepository.findAllByUbicacionGps(parada.getUbicacionGps(), pageable);
+        Page<Monopatin> monopatines = monopatinRepository.findAllByUbicacionGpsAndEstado(parada.getUbicacionGps(), EstadoMonopatin.LIBRE, pageable);
 
         return monopatines.map(monopatinMapper::toResponseDTO);
     }

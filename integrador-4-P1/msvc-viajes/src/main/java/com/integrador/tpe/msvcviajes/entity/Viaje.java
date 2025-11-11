@@ -1,8 +1,10 @@
 package com.integrador.tpe.msvcviajes.entity;
 
+import com.integrador.tpe.msvcviajes.dto.interservice.request.TipoCuenta;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +31,10 @@ public class Viaje {
     @Column(name = "id_cuenta", nullable = false)
     private Long idCuenta; // fk a Cuenta
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "tipo_cuenta", nullable = false)
+    private TipoCuenta tipoCuenta = TipoCuenta.BASICA;
+
     @Column(name = "fecha_inicio", nullable = false)
     private LocalDateTime fechaInicio;
 
@@ -36,10 +42,35 @@ public class Viaje {
     private LocalDateTime fechaFin;
 
     @Column(name = "km_recorridos")
-    private Double kmRecorridos;
+    private Double kmRecorridos = 0.0;
 
     @OneToMany(mappedBy = "viaje", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Pausa> pausas = new ArrayList<>();
+
+    @Column(name = "tiempo_pausa")
+    private Double tiempoPausa = 0.0;
+
+    @Column(name = "tiempo_viaje")
+    private Double tiempoViaje = 0.0;
+
+    @PreUpdate
+    private void calcularTiempos() {
+        // tiempo de pausa
+        if (pausas.isEmpty())
+            return;
+        double totalPausa = 0.0;
+        for (Pausa pausa : pausas) {
+            if (pausa.getFechaFin() != null && pausa.getFechaInicio() != null) {
+                totalPausa += Duration.between(pausa.getFechaInicio(), pausa.getFechaFin()).toMinutes();
+                tiempoPausa = totalPausa;
+            }
+        }
+        // tiempo de viaje
+        if (fechaFin != null && fechaInicio != null) {
+            double tiempoTotal = Duration.between(fechaInicio, fechaFin).toMinutes();
+            tiempoViaje = tiempoTotal - tiempoPausa;
+        }
+    }
 
     @Override
     public boolean equals(Object o) {

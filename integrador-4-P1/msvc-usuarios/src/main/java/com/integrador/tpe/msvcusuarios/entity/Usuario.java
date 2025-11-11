@@ -1,7 +1,6 @@
 package com.integrador.tpe.msvcusuarios.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.integrador.tpe.msvcusuarios.dto.inteservice.Viaje;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -39,6 +38,10 @@ public class Usuario {
     @ManyToMany(mappedBy = "usuarios", fetch = FetchType.LAZY)
     @JsonBackReference
     private Set<Cuenta> cuentas = new HashSet<>();
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, columnDefinition = "VARCHAR(20) DEFAULT 'USER")
+    private Role role = Role.USER;
     
     @PrePersist
     private void prePersist() {
@@ -53,6 +56,10 @@ public class Usuario {
     public void addCuenta(Cuenta cuenta) {
         this.cuentas.add(cuenta);
         cuenta.getUsuarios().add(this);
+    }
+
+    public boolean hasRole(Role role) {
+        return this.role == role;
     }
 
     @Override

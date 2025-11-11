@@ -1,10 +1,13 @@
 package com.integrador.tpe.msvcviajes.service;
 
+import com.integrador.tpe.msvcviajes.dto.interservice.request.UsuarioBusquedaDTO;
 import com.integrador.tpe.msvcviajes.dto.interservice.request.ViajeReporteRequestDTO;
-import com.integrador.tpe.msvcviajes.dto.interservice.response.ViajeReporteResponseDTO;
+import com.integrador.tpe.msvcviajes.dto.interservice.response.ReporteConsumoPersonalServicio;
+import com.integrador.tpe.msvcviajes.dto.interservice.response.ReporteUsoMonopatines;
+import com.integrador.tpe.msvcviajes.dto.interservice.response.UsuarioResponseDTO;
+import com.integrador.tpe.msvcviajes.dto.response.ViajeReporteResponseDTO;
 import com.integrador.tpe.msvcviajes.dto.request.ViajeRequestDTO;
 import com.integrador.tpe.msvcviajes.dto.response.ViajeResponseDTO;
-import com.integrador.tpe.msvcviajes.entity.Viaje;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -20,8 +23,13 @@ public interface IViajeService {
 
     void finalizarViaje(Long idViaje, ViajeRequestDTO viajeRequestDTO);
 
-    // opcionalmente filtrar por fecha de viaje
     Page<ViajeResponseDTO> getAllViajes(Pageable pageable, LocalDateTime fecha);
 
     List<ViajeReporteResponseDTO> findAllViajesHechosPorAnioConCantidadViajesX(ViajeReporteRequestDTO viajeReporteRequestDTO);
+
+    List<UsuarioResponseDTO> findTopUsuariosPorUso(UsuarioBusquedaDTO usuarioBusquedaDTO);
+
+    List<ReporteUsoMonopatines> generarReporteUsoMonopatines(boolean incluyePausa);
+
+    ReporteConsumoPersonalServicio generarReporteConsumoPersonalServicio(Long idUsuario, LocalDateTime periodoInicio, LocalDateTime periodoFin);
 }

@@ -17,5 +17,5 @@ public interface ITarifaService {
 
     void deleteTarifa(Long id);
 
-    TarifaResponseDTO updateTarifa(Long id, TarifaRequestDTO tarifaRequestDTO);
+    TarifaResponseDTO updateTarifa(Long id, TarifaRequestDTO tarifaRequestDTO, Long idAdmin);
 }

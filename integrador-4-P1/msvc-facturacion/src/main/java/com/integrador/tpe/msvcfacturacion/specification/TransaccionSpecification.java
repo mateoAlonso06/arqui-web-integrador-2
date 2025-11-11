@@ -10,9 +10,6 @@ import java.util.List;
 
 public class TransaccionSpecification {
     public static Specification<Transaccion> build(TransaccionFiltroDTO filtro) {
-        if (filtro == null) {
-            return (root, query, cb) -> cb.conjunction(); // Sin filtros
-        }
         return (root, query, cb) -> {
             List<Predicate> predicates = new ArrayList<>();
             if (filtro.getFechaInicio() != null) {

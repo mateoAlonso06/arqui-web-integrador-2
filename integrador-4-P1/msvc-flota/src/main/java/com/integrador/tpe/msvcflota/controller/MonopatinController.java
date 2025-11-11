@@ -71,4 +71,17 @@ public class MonopatinController {
         Page<MonopatinResponseDTO> monopatines = monopatinService.getAllMonopatines(pageable);
         return ResponseEntity.ok(monopatines);
     }
+
+    // Asegurar estos endpoints funcionan correctamente solo es para que lo haga un admin
+    @PutMapping("/{idMonopatin}/estado/deshabilitar")
+    public ResponseEntity<Void> deshabilitarMonopatin(@RequestParam @NotBlank String idMonopatin) {
+        monopatinService.deshabilitarMonopatin(idMonopatin);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/{idMonopatin}/estado/habilitar")
+    public ResponseEntity<Void> habilitar(@RequestParam @NotBlank String idMonopatin) {
+        monopatinService.habilitarMonopatin(idMonopatin);
+        return ResponseEntity.noContent().build();
+    }
 }

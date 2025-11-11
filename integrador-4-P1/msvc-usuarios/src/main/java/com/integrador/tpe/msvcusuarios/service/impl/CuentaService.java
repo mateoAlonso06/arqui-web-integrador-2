@@ -3,6 +3,7 @@ package com.integrador.tpe.msvcusuarios.service.impl;
 import com.integrador.tpe.msvcusuarios.dto.request.CuentaRequestDTO;
 import com.integrador.tpe.msvcusuarios.dto.response.CuentaResponseDTO;
 import com.integrador.tpe.msvcusuarios.entity.Cuenta;
+import com.integrador.tpe.msvcusuarios.entity.Role;
 import com.integrador.tpe.msvcusuarios.entity.Usuario;
 import com.integrador.tpe.msvcusuarios.exception.CuentaNotFoundException;
 import com.integrador.tpe.msvcusuarios.exception.UsuarioNotFoundException;
@@ -101,9 +102,16 @@ public class CuentaService implements ICuentaService {
      */
     @Override
     @Transactional
-    public CuentaResponseDTO habilitarCuenta(Long id) {
+    public CuentaResponseDTO habilitarCuenta(Long id, Long idAdmin) {
         Cuenta cuenta = cuentaRepository.findById(id)
                 .orElseThrow(() -> new CuentaNotFoundException("No existe cuenta con ID: " + id));
+
+        Usuario usuario = usuarioRepository.findById(idAdmin)
+                .orElseThrow(() -> new UsuarioNotFoundException("No existe usuario con ID: " + idAdmin));
+
+        if (!usuario.hasRole(Role.ADMIN)) {
+            throw new IllegalArgumentException("El usuario con ID: " + idAdmin + " no tiene permisos de administrador");
+        }
 
         if (!cuenta.isCuentaHabilitada()) {
             cuenta.setEstadoCuenta(true);
@@ -123,9 +131,16 @@ public class CuentaService implements ICuentaService {
      */
     @Override
     @Transactional
-    public CuentaResponseDTO deshabilitarCuenta(Long id) {
+    public CuentaResponseDTO deshabilitarCuenta(Long id, Long idAdmin) {
         Cuenta cuenta = cuentaRepository.findById(id)
                 .orElseThrow(() -> new CuentaNotFoundException("No existe cuenta con ID: " + id));
+
+        Usuario usuario = usuarioRepository.findById(idAdmin)
+                .orElseThrow(() -> new UsuarioNotFoundException("No existe usuario con ID: " + idAdmin));
+
+        if (!usuario.hasRole(Role.ADMIN)) {
+            throw new IllegalArgumentException("El usuario con ID: " + idAdmin + " no tiene permisos de administrador");
+        }
 
         if (cuenta.isCuentaHabilitada()) {
             cuenta.setEstadoCuenta(false);

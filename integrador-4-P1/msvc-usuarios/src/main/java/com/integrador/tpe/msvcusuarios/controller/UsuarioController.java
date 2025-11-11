@@ -1,10 +1,15 @@
 package com.integrador.tpe.msvcusuarios.controller;
 
+import com.integrador.tpe.msvcusuarios.dto.request.FechasFiltroDTO;
 import com.integrador.tpe.msvcusuarios.dto.request.UsuarioRequestDTO;
 import com.integrador.tpe.msvcusuarios.dto.request.UsuarioUpdateDTO;
+import com.integrador.tpe.msvcusuarios.dto.response.ReporteConsumoServicioCompleto;
+import com.integrador.tpe.msvcusuarios.dto.response.ReporteUsoMonopatin;
 import com.integrador.tpe.msvcusuarios.dto.response.UsuarioResponseDTO;
 import com.integrador.tpe.msvcusuarios.service.IUsuarioService;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.data.domain.Page;
@@ -15,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -70,5 +76,30 @@ public class UsuarioController {
     public ResponseEntity<UsuarioResponseDTO> updatePatchUsuario(@PathVariable Long id, @RequestBody @Valid UsuarioUpdateDTO usuarioUpdateDTO) {
         UsuarioResponseDTO updatedUsuario = usuarioService.updatePatchUsuario(id, usuarioUpdateDTO);
         return ResponseEntity.ok(updatedUsuario);
+    }
+
+    // Como administrador
+    @GetMapping("/monopatines/administracion/{idAdmin}/reporte-uso")
+    public ResponseEntity<List<ReporteUsoMonopatin>> generarReporteUsoMonopatines(@PathVariable Long idAdmin, @RequestParam(required = false) boolean incluyePausa) {
+        List<ReporteUsoMonopatin> reporte = usuarioService.generarReporteUsoMonopatines(idAdmin, incluyePausa);
+        return ResponseEntity.ok().body(reporte);
+    }
+
+    @GetMapping("/admin/{idAdmin}")
+    public ResponseEntity<Boolean> isAdmin(@PathVariable @Positive @NotNull Long idAdmin) {
+        boolean isAdmin = usuarioService.isAdmin(idAdmin);
+        return ResponseEntity.ok(isAdmin);
+    }
+
+    @GetMapping("/{id}/consumo-servicio")
+    public ResponseEntity<ReporteConsumoServicioCompleto> obtenerReporteConsumoPersonal(
+            @PathVariable Long id,
+            @RequestBody @Valid FechasFiltroDTO fechasFiltroDTO,
+            @RequestParam(required = false, defaultValue = "false") boolean incluyeRelaciones) {
+        ReporteConsumoServicioCompleto reporte = usuarioService.obtenerReporteConsumo(
+                id,
+                fechasFiltroDTO,
+                incluyeRelaciones);
+        return ResponseEntity.ok(reporte);
     }
 }

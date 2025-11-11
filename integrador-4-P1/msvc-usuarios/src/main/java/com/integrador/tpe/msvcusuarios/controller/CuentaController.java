@@ -83,16 +83,16 @@ public class CuentaController {
     }
 
     // endpoint protegido
-    @PatchMapping("/{id}/habilitar")
-    public ResponseEntity<CuentaResponseDTO> habilitarCuenta(@PathVariable @Positive @NotNull Long id) {
-        CuentaResponseDTO cuentaHabilitada = cuentaService.habilitarCuenta(id);
+    @PatchMapping("/{id}/administraccion/{idAdmin}/habilitar")
+    public ResponseEntity<CuentaResponseDTO> habilitarCuenta(@PathVariable @Positive @NotNull Long id, @PathVariable @Positive @NotNull Long idAdmin) {
+        CuentaResponseDTO cuentaHabilitada = cuentaService.habilitarCuenta(id, idAdmin);
         return ResponseEntity.ok().body(cuentaHabilitada);
     }
 
     // endpoint protegido
-    @PatchMapping("/{id}/deshabilitar")
-    public ResponseEntity<CuentaResponseDTO> deshabilitarCuenta(@PathVariable @Positive @NotNull Long id) {
-        CuentaResponseDTO cuentaDeshabilitada = cuentaService.deshabilitarCuenta(id);
+    @PatchMapping("/{id}/administraccion/{idAdmin}/deshabilitar")
+    public ResponseEntity<CuentaResponseDTO> deshabilitarCuenta(@PathVariable @Positive @NotNull Long id, @PathVariable @Positive @NotNull Long idAdmin) {
+        CuentaResponseDTO cuentaDeshabilitada = cuentaService.deshabilitarCuenta(id, idAdmin);
         return ResponseEntity.ok().body(cuentaDeshabilitada);
     }
 }
