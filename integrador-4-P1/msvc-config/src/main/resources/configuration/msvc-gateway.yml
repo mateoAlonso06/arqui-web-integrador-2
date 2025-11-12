@@ -11,9 +11,10 @@ eureka:
 spring:
   application:
     name: msvc-gateway
+
   cloud:
     gateway:
       discovery:
         locator:
-          enabled: true
-        routes: []
+          enabled: true        # 🔹 Permite descubrir rutas automáticamente desde Eureka
+          lower-case-service-id: true  # 🔹 Usa IDs en minúsculas (coincide con tus nombres en Eureka)

@@ -2,6 +2,7 @@ package com.integrador.tpe.msvcreportes.clients;
 
 import com.integrador.tpe.msvcreportes.dto.UsuarioReporteResponseDTO;
 import com.integrador.tpe.msvcreportes.dto.ViajeReporteResponseDTO;
+import com.integrador.tpe.msvcreportes.model.TipoCuenta;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -15,7 +16,8 @@ public interface ViajeFeignClient {
     List<ViajeReporteResponseDTO> obtenerReporteDeViajesPorMonopatin(@RequestParam Integer cantidadViajes, @RequestParam Integer anio);
 
     @GetMapping("/usuarios/reporte/usuarios-top-uso")
-    List<UsuarioReporteResponseDTO> obtenerTopUsuariosPorUso(@RequestParam LocalDateTime fechaInicio,
-                                                             @RequestParam LocalDateTime fechaFin,
-                                                             @RequestParam String tipoCuenta);
+    List<UsuarioReporteResponseDTO> obtenerTopUsuariosPorUso(@RequestParam(required = false) LocalDateTime fechaInicio,
+                                                             @RequestParam(required = false) LocalDateTime fechaFin,
+                                                             @RequestParam TipoCuenta tipoCuenta
+    );
 }

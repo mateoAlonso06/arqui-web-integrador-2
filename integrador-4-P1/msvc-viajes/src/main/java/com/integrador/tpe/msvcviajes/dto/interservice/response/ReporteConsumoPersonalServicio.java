@@ -14,6 +14,4 @@ import java.time.LocalDateTime;
 public class ReporteConsumoPersonalServicio {
     private Double cantidadHorasServicio;
     private Double kmRecorridos;
-    private LocalDateTime periodoInicio;
-    private LocalDateTime periodoFin;
 }

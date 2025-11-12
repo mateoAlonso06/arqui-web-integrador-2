@@ -1,5 +1,6 @@
 package com.integrador.tpe.msvcviajes.repository;
 
+import com.integrador.tpe.msvcviajes.dto.interservice.request.TipoCuenta;
 import com.integrador.tpe.msvcviajes.dto.interservice.response.ReporteConsumoPersonalServicio;
 import com.integrador.tpe.msvcviajes.dto.interservice.response.ReporteUsoMonopatines;
 import com.integrador.tpe.msvcviajes.dto.interservice.response.UsuarioResponseDTO;
@@ -40,26 +41,26 @@ public interface ViajeRepository extends JpaRepository<Viaje, Long> {
     @Query("""
             SELECT new com.integrador.tpe.msvcviajes.dto.interservice.response.UsuarioResponseDTO(
                 v.idUsuario,
-                COUNT(v)
+                COUNT(v.idUsuario)
             )
             FROM Viaje v
-            WHERE v.fechaInicio BETWEEN :fechaInicio AND :fechaFin
-            AND v.tipoCuenta = :tipoCuenta
+            WHERE v.tipoCuenta = :tipoCuenta
+                AND v.fechaInicio >= :fechaInicio
+                AND v.fechaInicio <= :fechaFin
             GROUP BY v.idUsuario
             ORDER BY COUNT(v) DESC
             """)
-    List<UsuarioResponseDTO> findAllUsuariosTop(LocalDateTime fechaInicio, LocalDateTime fechaFin, String tipoCuenta);
+    List<UsuarioResponseDTO> findAllUsuariosTop(@Param("tipoCuenta") TipoCuenta tipoCuenta, LocalDateTime fechaInicio, LocalDateTime fechaFin);
 
     @Query("""
-                    SELECT new com.integrador.tpe.msvcviajes.dto.interservice.response.ReporteUsoMonopatines(
-                        v.idMonopatin,
-                        COUNT(v),
-                        SUM(v.kmRecorridos),
-                        v.tiempoPausa
-                    )
-                    FROM Viaje v
-                    JOIN v.pausas p
-                    GROUP BY v.idMonopatin
+                SELECT new com.integrador.tpe.msvcviajes.dto.interservice.response.ReporteUsoMonopatines(
+                    v.idMonopatin,
+                    COUNT(v),
+                    SUM(v.kmRecorridos),
+                    SUM(v.tiempoPausa)
+                )
+                FROM Viaje v
+                GROUP BY v.idMonopatin
             """)
     List<ReporteUsoMonopatines> generarReporteUsoMonopatinesConPausa();
 
@@ -68,11 +69,9 @@ public interface ViajeRepository extends JpaRepository<Viaje, Long> {
                     SELECT new com.integrador.tpe.msvcviajes.dto.interservice.response.ReporteUsoMonopatines(
                         v.idMonopatin,
                         COUNT(v),
-                        SUM(v.kmRecorridos),
-                        null 
+                        SUM(v.kmRecorridos)
                     )
                     FROM Viaje v
-                    JOIN v.pausas p
                     GROUP BY v.idMonopatin
             """)
     List<ReporteUsoMonopatines> generarReporteUsoMonopatinesSinPausa();
@@ -80,13 +79,12 @@ public interface ViajeRepository extends JpaRepository<Viaje, Long> {
     @Query("""
                 SELECT new com.integrador.tpe.msvcviajes.dto.interservice.response.ReporteConsumoPersonalServicio(
                     SUM(v.tiempoViaje),
-                    SUM(v.kmRecorridos),
-                    v.fechaInicio,
-                    v.fechaFin
+                    SUM(v.kmRecorridos)
                 )
                 FROM Viaje v 
                 WHERE v.idUsuario = :idUsuario
                 AND v.fechaInicio BETWEEN :fechaInicio AND :fechaFin
+                GROUP BY v.idUsuario
             """)
     ReporteConsumoPersonalServicio generarReporteConsumoPersonalServicio(Long idUsuario, LocalDateTime fechaInicio, LocalDateTime fechaFin);
 }

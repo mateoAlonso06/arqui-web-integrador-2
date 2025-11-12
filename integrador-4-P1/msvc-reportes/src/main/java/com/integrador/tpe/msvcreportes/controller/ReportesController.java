@@ -31,7 +31,7 @@ public class ReportesController {
 
     @GetMapping("/usuarios/top-usuarios/admin/{idAdmin}") // INCISO E
     public ResponseEntity<List<UsuarioReporteResponseDTO>> obtenerTopUsuariosPorUso(@ModelAttribute @Valid UsuarioBusquedaDTO usuarioBusquedaDTO, @PathVariable Long idAdmin) {
-        List<UsuarioReporteResponseDTO> topUsuarios = reportesService.obtenerTopUsuariosPorUso(usuarioBusquedaDTO, idAdmin);
-        return ResponseEntity.ok(topUsuarios);
+        List<UsuarioReporteResponseDTO> topUsuario = reportesService.obtenerTopUsuariosPorUso(usuarioBusquedaDTO, idAdmin);
+        return ResponseEntity.ok(topUsuario);
     }
 }

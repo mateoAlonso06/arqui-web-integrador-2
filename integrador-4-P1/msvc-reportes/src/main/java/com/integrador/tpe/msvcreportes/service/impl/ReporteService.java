@@ -10,7 +10,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -58,13 +57,14 @@ public class ReporteService implements IReportesService {
 
     @Override
     public List<UsuarioReporteResponseDTO> obtenerTopUsuariosPorUso(UsuarioBusquedaDTO usuarioBusquedaDTO, Long idAdmin) {
-        if (!esAdministrador(idAdmin)) {
+        if (!esAdministrador(idAdmin))
             throw new RuntimeException("Acceso denegado: El usuario no es administrador.");
-        }
+
         LocalDateTime fechaInicio = usuarioBusquedaDTO.fechaInicio();
-        LocalDateTime fechaFin = usuarioBusquedaDTO.fechaInicio();
+        LocalDateTime fechaFin = usuarioBusquedaDTO.fechaFin();
         TipoCuenta tipoCuenta = usuarioBusquedaDTO.tipoCuenta();
-        return viajeFeignClient.obtenerTopUsuariosPorUso(fechaInicio, fechaFin, tipoCuenta.toString());
+
+        return viajeFeignClient.obtenerTopUsuariosPorUso(fechaInicio, fechaFin, tipoCuenta);
     }
 
     private boolean esAdministrador(Long idAdmin) {

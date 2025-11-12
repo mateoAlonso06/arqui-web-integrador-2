@@ -5,8 +5,8 @@ import com.integrador.tpe.msvcviajes.dto.interservice.request.ViajeReporteReques
 import com.integrador.tpe.msvcviajes.dto.interservice.response.ReporteConsumoPersonalServicio;
 import com.integrador.tpe.msvcviajes.dto.interservice.response.ReporteUsoMonopatines;
 import com.integrador.tpe.msvcviajes.dto.interservice.response.UsuarioResponseDTO;
-import com.integrador.tpe.msvcviajes.dto.response.ViajeReporteResponseDTO;
 import com.integrador.tpe.msvcviajes.dto.request.ViajeRequestDTO;
+import com.integrador.tpe.msvcviajes.dto.response.ViajeReporteResponseDTO;
 import com.integrador.tpe.msvcviajes.dto.response.ViajeResponseDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

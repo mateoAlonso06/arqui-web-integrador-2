@@ -1,13 +1,14 @@
 package com.integrador.tpe.msvcviajes.controller;
 
 import com.integrador.tpe.msvcviajes.dto.interservice.request.FechasFiltroDTO;
+import com.integrador.tpe.msvcviajes.dto.interservice.request.TipoCuenta;
 import com.integrador.tpe.msvcviajes.dto.interservice.request.UsuarioBusquedaDTO;
 import com.integrador.tpe.msvcviajes.dto.interservice.request.ViajeReporteRequestDTO;
 import com.integrador.tpe.msvcviajes.dto.interservice.response.ReporteConsumoPersonalServicio;
 import com.integrador.tpe.msvcviajes.dto.interservice.response.ReporteUsoMonopatines;
 import com.integrador.tpe.msvcviajes.dto.interservice.response.UsuarioResponseDTO;
-import com.integrador.tpe.msvcviajes.dto.response.ViajeReporteResponseDTO;
 import com.integrador.tpe.msvcviajes.dto.request.ViajeRequestDTO;
+import com.integrador.tpe.msvcviajes.dto.response.ViajeReporteResponseDTO;
 import com.integrador.tpe.msvcviajes.dto.response.ViajeResponseDTO;
 import com.integrador.tpe.msvcviajes.service.IViajeService;
 import jakarta.validation.Valid;
@@ -17,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -26,6 +28,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
+@Validated
 @RequestMapping("api/viajes")
 public class ViajeController {
     private final IViajeService viajeService;
@@ -76,20 +79,21 @@ public class ViajeController {
     }
 
     @GetMapping("/usuarios/reporte/usuarios-top-uso")
-    public ResponseEntity<List<UsuarioResponseDTO>> getTopUsuariosPorUso(@ModelAttribute UsuarioBusquedaDTO usuarioBusquedaDTO) {
-        List<UsuarioResponseDTO> viajes = viajeService.findTopUsuariosPorUso(usuarioBusquedaDTO);
-        return ResponseEntity.ok().body(viajes);
+    public ResponseEntity<List<UsuarioResponseDTO>> getTopUsuariosPorUso(@RequestParam(required = true) LocalDateTime fechaInicio,
+                                                                         @RequestParam(required = true) LocalDateTime fechaFin,
+                                                                         @RequestParam(required = true) TipoCuenta tipoCuenta) {
+        List<UsuarioResponseDTO> usuarios = viajeService.findTopUsuariosPorUso(new UsuarioBusquedaDTO(fechaInicio, fechaFin, tipoCuenta));
+        return ResponseEntity.ok().body(usuarios);
     }
 
-
     @GetMapping("/monopatines/uso/reporte") // Lo usa usuarios
-    public ResponseEntity<List<ReporteUsoMonopatines>> generarReporteUsoMonopatines(@RequestParam(required = false, defaultValue = "false") boolean incluyePausa) {
+    public ResponseEntity<List<ReporteUsoMonopatines>> generarReporteUsoMonopatines(@RequestParam boolean incluyePausa) {
         List<ReporteUsoMonopatines> reporte = viajeService.generarReporteUsoMonopatines(incluyePausa);
         return ResponseEntity.ok(reporte);
     }
 
     @GetMapping("/servicios/consumo/{idUsuario}/reporte") // Lo usa usuarios
-    public ResponseEntity<ReporteConsumoPersonalServicio> generarReporteConsumoPersonalServicio(@PathVariable @NotNull @Positive Long idUsuario, @RequestBody @Valid FechasFiltroDTO fechasFiltro) {
+    public ResponseEntity<ReporteConsumoPersonalServicio> generarReporteConsumoPersonalServicio(@PathVariable @NotNull @Positive Long idUsuario, @ModelAttribute @Valid FechasFiltroDTO fechasFiltro) {
         ReporteConsumoPersonalServicio reporte = viajeService.generarReporteConsumoPersonalServicio(idUsuario, fechasFiltro.fechaInicio(), fechasFiltro.fechaFin());
         return ResponseEntity.ok().body(reporte);
     }

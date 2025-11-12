@@ -66,8 +66,9 @@ public class Viaje {
             }
         }
         // tiempo de viaje
-        if (fechaFin != null && fechaInicio != null) {
-            double tiempoTotal = Duration.between(fechaInicio, fechaFin).toMinutes();
+        if (fechaInicio != null && fechaFin == null) {
+            LocalDateTime fechaActual = LocalDateTime.now();
+            double tiempoTotal = Duration.between(fechaInicio, fechaActual).toMinutes();
             tiempoViaje = tiempoTotal - tiempoPausa;
         }
     }

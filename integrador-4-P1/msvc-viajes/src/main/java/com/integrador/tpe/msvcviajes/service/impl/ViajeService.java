@@ -109,7 +109,7 @@ public class ViajeService implements IViajeService {
         MonopatinResponseDTO monopatin = monopatinClient.getMonopatinById(idMonopatin);
 
 
-        if (viajeRequestDTO.getKmRecorridos()==null)
+        if (viajeRequestDTO.getKmRecorridos() == null)
             throw new IllegalStateException("Los kilómetros recorridos no pueden ser nulos al finalizar el viaje.");
 
         if (viaje.getFechaFin() != null)
@@ -195,8 +195,7 @@ public class ViajeService implements IViajeService {
         Integer cantidadViajes = viajeReporteRequestDTO.cantidadViajes();
         Integer anio = viajeReporteRequestDTO.anio();
 
-        List<ViajeReporteResponseDTO> viajes = viajeRepository.findAllViajesHechosPorAnioConCantidadViajesX(cantidadViajes, anio);
-        return viajes;
+        return viajeRepository.findAllViajesHechosPorAnioConCantidadViajesX(cantidadViajes, anio);
     }
 
     @Override
@@ -204,9 +203,8 @@ public class ViajeService implements IViajeService {
     public List<UsuarioResponseDTO> findTopUsuariosPorUso(UsuarioBusquedaDTO usuarioBusquedaDTO) {
         LocalDateTime fechaInicio = usuarioBusquedaDTO.fechaInicio();
         LocalDateTime fechaFin = usuarioBusquedaDTO.fechaFin();
-        String tipoCuenta = usuarioBusquedaDTO.tipoCuenta().toString();
 
-        return viajeRepository.findAllUsuariosTop(fechaInicio, fechaFin, tipoCuenta);
+        return viajeRepository.findAllUsuariosTop(usuarioBusquedaDTO.tipoCuenta(), fechaInicio, fechaFin);
     }
 
     @Override
@@ -220,7 +218,8 @@ public class ViajeService implements IViajeService {
 
     @Override
     @Transactional(readOnly = true) // INCISO H
-    public ReporteConsumoPersonalServicio generarReporteConsumoPersonalServicio(Long idUsuario, LocalDateTime fechaInicio, LocalDateTime fechaFin) {
+    public ReporteConsumoPersonalServicio generarReporteConsumoPersonalServicio(Long idUsuario, LocalDateTime
+            fechaInicio, LocalDateTime fechaFin) {
         return viajeRepository.generarReporteConsumoPersonalServicio(idUsuario, fechaInicio, fechaFin);
     }
 }
