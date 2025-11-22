@@ -1,62 +1,78 @@
 package com.integrador.tpe.msvcgateway.config;
 
-import org.springframework.cloud.gateway.filter.GatewayFilterChain;
-import org.springframework.cloud.gateway.filter.GlobalFilter;
-import org.springframework.core.Ordered;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.server.reactive.ServerHttpRequest;
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
+import org.springframework.lang.NonNull;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
-import org.springframework.web.server.ServerWebExchange;
-import reactor.core.publisher.Mono;
+import org.springframework.web.filter.OncePerRequestFilter;
+
+import java.io.IOException;
+import java.util.List;
 
 @Component
-public class JwtAuthenticationFilter implements GlobalFilter, Ordered {
+@RequiredArgsConstructor
+public class JwtAuthenticationFilter extends OncePerRequestFilter {
+
     private final JwtUtil jwtUtil;
 
-    public JwtAuthenticationFilter(JwtUtil jwtUtil) {
-        this.jwtUtil = jwtUtil;
-    }
-
     @Override
-    public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
-        ServerHttpRequest request = exchange.getRequest();
+    protected void doFilterInternal(
+            @NonNull HttpServletRequest request,
+            @NonNull HttpServletResponse response,
+            @NonNull FilterChain filterChain
+    ) throws ServletException, IOException {
 
         // Rutas públicas que no necesitan autenticación
-        if (isPublicPath(request.getPath().toString())) {
-            return chain.filter(exchange);
+        String path = request.getRequestURI();
+        if (isPublicPath(path)) {
+            filterChain.doFilter(request, response);
+            return;
         }
 
-        String authHeader = request.getHeaders().getFirst("Authorization");
+        String authHeader = request.getHeader("Authorization");
 
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
-            return exchange.getResponse().setComplete();
+            filterChain.doFilter(request, response);
+            return;
         }
 
         String token = authHeader.substring(7);
 
-        if (!jwtUtil.validateToken(token)) {
-            exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
-            return exchange.getResponse().setComplete();
+        try {
+            if (jwtUtil.validateToken(token)) {
+                String email = jwtUtil.extractEmail(token);
+                String role = jwtUtil.extractRole(token);
+
+                // Configurar contexto de seguridad
+                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
+                        email,
+                        null,
+                        List.of(new SimpleGrantedAuthority("ROLE_" + role))
+                );
+
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+
+                // Propagar información del usuario mediante headers (opcional para microservicios)
+                response.addHeader("X-User-Email", email);
+                response.addHeader("X-User-Role", role);
+            }
+        } catch (Exception e) {
+            // Token inválido, continuar sin autenticación
+            SecurityContextHolder.clearContext();
         }
 
-        // Propagar información del usuario a los microservicios
-        String username = jwtUtil.getClaims(token).getSubject();
-        ServerHttpRequest modifiedRequest = request.mutate()
-                .header("X-User-Name", username)
-                .build();
-
-        return chain.filter(exchange.mutate().request(modifiedRequest).build());
+        filterChain.doFilter(request, response);
     }
 
     private boolean isPublicPath(String path) {
-        return path.startsWith("/api/auth/login") ||
-                path.startsWith("/api/auth/register") ||
-                path.startsWith("/eureka");
-    }
-
-    @Override
-    public int getOrder() {
-        return -1; // Ejecutar antes que otros filtros
+        return path.startsWith("/api/auth/") ||
+                path.startsWith("/eureka") ||
+                path.startsWith("/actuator");
     }
 }

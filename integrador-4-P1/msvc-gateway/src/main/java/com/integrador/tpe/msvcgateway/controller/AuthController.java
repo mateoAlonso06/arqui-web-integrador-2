@@ -1,8 +1,8 @@
-package com.integrador.tpe.msvcgateway;
+package com.integrador.tpe.msvcgateway.controller;
 
-import com.integrador.tpe.msvcgateway.client.UsuarioClient;
-import com.integrador.tpe.msvcgateway.config.JwtUtil;
-import com.integrador.tpe.msvcgateway.dto.LoginRequest;
+import com.integrador.tpe.msvcgateway.dto.request.LoginRequest;
+import com.integrador.tpe.msvcgateway.dto.response.LoginResponse;
+import com.integrador.tpe.msvcgateway.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;

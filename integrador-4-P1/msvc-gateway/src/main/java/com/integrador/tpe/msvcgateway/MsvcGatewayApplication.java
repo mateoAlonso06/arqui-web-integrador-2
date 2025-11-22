@@ -6,8 +6,8 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 
 @SpringBootApplication
-@EnableFeignClients(basePackages = "com.integrador.tpe.msvcgateway.client")
 @EnableDiscoveryClient
+@EnableFeignClients
 public class MsvcGatewayApplication {
 
     public static void main(String[] args) {

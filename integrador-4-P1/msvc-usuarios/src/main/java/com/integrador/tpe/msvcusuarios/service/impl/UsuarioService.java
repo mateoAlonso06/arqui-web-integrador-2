@@ -1,6 +1,7 @@
 package com.integrador.tpe.msvcusuarios.service.impl;
 
 import com.integrador.tpe.msvcusuarios.clients.ViajeFeignClient;
+import com.integrador.tpe.msvcusuarios.dto.inteservice.UsuarioResponseValidated;
 import com.integrador.tpe.msvcusuarios.dto.request.FechasFiltroDTO;
 import com.integrador.tpe.msvcusuarios.dto.request.LoginRequestDTO;
 import com.integrador.tpe.msvcusuarios.dto.request.UsuarioRequestDTO;
@@ -8,6 +9,7 @@ import com.integrador.tpe.msvcusuarios.dto.request.UsuarioUpdateDTO;
 import com.integrador.tpe.msvcusuarios.dto.response.*;
 import com.integrador.tpe.msvcusuarios.entity.Role;
 import com.integrador.tpe.msvcusuarios.entity.Usuario;
+import com.integrador.tpe.msvcusuarios.exception.CredentialsInvalidException;
 import com.integrador.tpe.msvcusuarios.exception.UsuarioNotFoundException;
 import com.integrador.tpe.msvcusuarios.mapper.UsuarioMapper;
 import com.integrador.tpe.msvcusuarios.repository.IUsuarioRepository;
@@ -19,6 +21,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.security.auth.login.CredentialException;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -31,15 +34,20 @@ public class UsuarioService implements IUsuarioService {
     private final ViajeFeignClient viajeClient;
     private final PasswordEncoder passwordEncoder;
 
+    @Override
     @Transactional(readOnly = true)
-    public UsuarioResponseDTO validateCredentials(LoginRequestDTO loginRequestDTO) {
+    public UsuarioResponseValidated validateCredentials(LoginRequestDTO loginRequestDTO) {
         Usuario usuario = usuarioRepository.findByEmail(loginRequestDTO.email())
                 .orElseThrow(() -> new UsuarioNotFoundException("No existe un usuario con email: " + loginRequestDTO.email()));
         // validar las credenciales
-        if (!passwordEncoder.matches(loginRequestDTO.password(), usuario.getPassword())) {
-            throw new IllegalArgumentException("Credenciales inválidas para el email: " + loginRequestDTO.email());
-        }
-        return usuarioMapper.toResponseDTO(usuario);
+        if (!passwordEncoder.matches(loginRequestDTO.password(), usuario.getPassword()))
+            throw new CredentialsInvalidException("Credenciales inválidas para el email: " + loginRequestDTO.email());
+
+        return new UsuarioResponseValidated(
+                usuario.getId(),
+                usuario.getEmail(),
+                usuario.getRole()
+        );
     }
 
     @Override

@@ -1,9 +1,8 @@
 package com.integrador.tpe.msvcgateway.dto;
 
-public record UsuarioDTO(
+public record UsuarioResponseDTO(
         Long id,
-        String username,
         String email,
-        String role
+        Role role
 ) {
 }

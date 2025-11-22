@@ -6,6 +6,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import javax.security.auth.login.CredentialException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -38,5 +39,11 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<String> handleIllegalArgumentException(IllegalArgumentException ex) {
         return ResponseEntity.badRequest().body(ex.getMessage());
+    }
+
+    @ExceptionHandler(CredentialsInvalidException.class)
+    public ResponseEntity<Map<String, String>> handleIllegalArgument(CredentialsInvalidException ex) {
+        return ResponseEntity.status(401)
+                .body(Map.of("error", ex.getMessage()));
     }
 }

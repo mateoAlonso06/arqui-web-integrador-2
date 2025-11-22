@@ -1,6 +1,8 @@
 package com.integrador.tpe.msvcusuarios.controller;
 
+import com.integrador.tpe.msvcusuarios.dto.inteservice.UsuarioResponseValidated;
 import com.integrador.tpe.msvcusuarios.dto.request.FechasFiltroDTO;
+import com.integrador.tpe.msvcusuarios.dto.request.LoginRequestDTO;
 import com.integrador.tpe.msvcusuarios.dto.request.UsuarioRequestDTO;
 import com.integrador.tpe.msvcusuarios.dto.request.UsuarioUpdateDTO;
 import com.integrador.tpe.msvcusuarios.dto.response.ReporteConsumoServicioCompleto;
@@ -39,6 +41,12 @@ public class UsuarioController {
     public ResponseEntity<Boolean> estaAsociadoConCuenta(@PathVariable Long idUsuario, @PathVariable Long idCuenta) {
         boolean asociado = usuarioService.estaAsociadoConCuenta(idUsuario, idCuenta);
         return ResponseEntity.ok(asociado);
+    }
+
+    @PostMapping("/validate")
+    public ResponseEntity<UsuarioResponseValidated> validateCredentials(@RequestBody @Valid LoginRequestDTO loginRequest) {
+        UsuarioResponseValidated usuarioResponseDTO = usuarioService.validateCredentials(loginRequest);
+        return ResponseEntity.ok(usuarioResponseDTO);
     }
 
     @PostMapping
