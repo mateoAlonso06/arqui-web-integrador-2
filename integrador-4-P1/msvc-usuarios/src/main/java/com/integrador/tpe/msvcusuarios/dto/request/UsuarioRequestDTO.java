@@ -11,6 +11,8 @@ public record UsuarioRequestDTO(
         String apellido,
         @NotBlank
         String celular,
+        @NotBlank
+        String password,
         @NotBlank @Email
         String email,
         Role role

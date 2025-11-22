@@ -32,6 +32,9 @@ public class Usuario {
     @Column(nullable = false, unique = false)
     private String email;
 
+    @Column(nullable = false)
+    private String password; // se guarda hasheado
+
     @Column(name = "fecha_alta", nullable = false, updatable = false)
     private LocalDateTime fechaAlta;
 
@@ -40,7 +43,7 @@ public class Usuario {
     private Set<Cuenta> cuentas = new HashSet<>();
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false, columnDefinition = "VARCHAR(20) DEFAULT 'USER")
+    @Column(nullable = false)
     private Role role = Role.USER;
     
     @PrePersist

@@ -2,6 +2,7 @@ package com.integrador.tpe.msvcusuarios.service.impl;
 
 import com.integrador.tpe.msvcusuarios.clients.ViajeFeignClient;
 import com.integrador.tpe.msvcusuarios.dto.request.FechasFiltroDTO;
+import com.integrador.tpe.msvcusuarios.dto.request.LoginRequestDTO;
 import com.integrador.tpe.msvcusuarios.dto.request.UsuarioRequestDTO;
 import com.integrador.tpe.msvcusuarios.dto.request.UsuarioUpdateDTO;
 import com.integrador.tpe.msvcusuarios.dto.response.*;
@@ -14,6 +15,7 @@ import com.integrador.tpe.msvcusuarios.service.IUsuarioService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,6 +29,18 @@ public class UsuarioService implements IUsuarioService {
     private final IUsuarioRepository usuarioRepository;
     private final UsuarioMapper usuarioMapper;
     private final ViajeFeignClient viajeClient;
+    private final PasswordEncoder passwordEncoder;
+
+    @Transactional(readOnly = true)
+    public UsuarioResponseDTO validateCredentials(LoginRequestDTO loginRequestDTO) {
+        Usuario usuario = usuarioRepository.findByEmail(loginRequestDTO.email())
+                .orElseThrow(() -> new UsuarioNotFoundException("No existe un usuario con email: " + loginRequestDTO.email()));
+        // validar las credenciales
+        if (!passwordEncoder.matches(loginRequestDTO.password(), usuario.getPassword())) {
+            throw new IllegalArgumentException("Credenciales inválidas para el email: " + loginRequestDTO.email());
+        }
+        return usuarioMapper.toResponseDTO(usuario);
+    }
 
     @Override
     @Transactional
@@ -35,6 +49,8 @@ public class UsuarioService implements IUsuarioService {
             throw new IllegalArgumentException("Ya existe un usuario con email: " + usuarioRequestDTO.email());
 
         Usuario toSave = usuarioMapper.toEntity(usuarioRequestDTO);
+        toSave.setPassword(passwordEncoder.encode(usuarioRequestDTO.password()));
+
         Usuario saved = usuarioRepository.save(toSave);
 
         return usuarioMapper.toResponseDTO(saved);

@@ -1,20 +1,85 @@
 server:
   port: 8080
 
+spring:
+  application:
+    name: api-gateway
+
+  cloud:
+    gateway:
+      # Rutas manuales del gateway
+      routes:
+        # Usuarios / Cuentas
+        - id: usuarios-route
+          uri: lb://msvc-usuarios
+          predicates:
+            - Path=/api/usuarios/**
+
+        - id: cuentas-route
+          uri: lb://msvc-usuarios
+          predicates:
+            - Path=/api/cuentas/**
+
+        # Flota
+        - id: monopatines-route
+          uri: lb://msvc-flota
+          predicates:
+            - Path=/api/monopatines/**
+
+        - id: paradas-route
+          uri: lb://msvc-flota
+          predicates:
+            - Path=/api/paradas/**
+
+        # Facturación
+        - id: facturacion-route
+          uri: lb://msvc-facturacion
+          predicates:
+            - Path=/api/facturacion/**
+
+        - id: transacciones-route
+          uri: lb://msvc-facturacion
+          predicates:
+            - Path=/api/transacciones/**
+
+        # Tarifas
+        - id: tarifas-route
+          uri: lb://msvc-tarifas
+          predicates:
+            - Path=/api/tarifas/**
+
+        # Viajes
+        - id: viajes-route
+          uri: lb://msvc-viajes
+          predicates:
+            - Path=/api/viajes/**
+
+        - id: pausas-route
+          uri: lb://msvc-viajes
+          predicates:
+            - Path=/api/pausas/**
+
+        # Reportes
+        - id: reportes-route
+          uri: lb://msvc-reportes
+          predicates:
+            - Path=/api/reportes/**
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
 eureka:
   client:
     serviceUrl:
       defaultZone: http://localhost:8761/eureka/
     registerWithEureka: true
     fetchRegistry: true
+  instance:
+    prefer-ip-address: true
+    instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
 
-spring:
-  application:
-    name: msvc-gateway
-
-  cloud:
-    gateway:
-      discovery:
-        locator:
-          enabled: true        # 🔹 Permite descubrir rutas automáticamente desde Eureka
-          lower-case-service-id: true  # 🔹 Usa IDs en minúsculas (coincide con tus nombres en Eureka)
+jwt:
+  secret: miClaveSecretaSuperSeguraDeAlMenos256Bits1234567890
+  expiration: 3600000
