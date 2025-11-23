@@ -18,6 +18,7 @@ public class AuthService {
     public LoginResponse authenticate(LoginRequest request) {
         ResponseEntity<UsuarioResponseDTO> response = usuarioFeignClient.validateCredentials(request);
 
+        // como viene un response entity puedo trabajar con su status code y body
         if (response.getStatusCode().is2xxSuccessful() && response.getBody() != null) {
             UsuarioResponseDTO usuario = response.getBody();
             String token = jwtUtil.generateToken(usuario.email(), usuario.role().toString());
@@ -30,7 +31,6 @@ public class AuthService {
                     null
             );
         }
-
         return new LoginResponse(null, null, null, false, "Credenciales inválidas");
     }
 }

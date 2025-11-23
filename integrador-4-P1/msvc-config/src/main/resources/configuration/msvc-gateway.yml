@@ -3,82 +3,65 @@ server:
 
 spring:
   application:
-    name: api-gateway
+    name: msvc-gateway
 
   cloud:
     gateway:
-      # Rutas manuales del gateway
-      routes:
-        # Usuarios / Cuentas
-        - id: usuarios-route
-          uri: lb://msvc-usuarios
-          predicates:
-            - Path=/api/usuarios/**
+      mvc:
+        routes:
+          - id: usuarios-route
+            uri: lb://msvc-usuarios
+            predicates:
+              - Path=/api/usuarios/**
+          - id: cuentas-route
+            uri: lb://msvc-usuarios
+            predicates:
+              - Path=/api/cuentas/**
+          - id: monopatines-route
+            uri: lb://msvc-flota
+            predicates:
+              - Path=/api/monopatines/**
+          - id: paradas-route
+            uri: lb://msvc-flota
+            predicates:
+              - Path=/api/paradas/**
+          - id: facturacion-route
+            uri: lb://msvc-facturacion
+            predicates:
+              - Path=/api/facturacion/**
+          - id: transacciones-route
+            uri: lb://msvc-facturacion
+            predicates:
+              - Path=/api/transacciones/**
+          - id: tarifas-route
+            uri: lb://msvc-tarifas
+            predicates:
+              - Path=/api/tarifas/**
+          - id: viajes-route
+            uri: lb://msvc-viajes
+            predicates:
+              - Path=/api/viajes/**
+          - id: pausas-route
+            uri: lb://msvc-viajes
+            predicates:
+              - Path=/api/pausas/**
+          - id: reportes-route
+            uri: lb://msvc-reportes
+            predicates:
+              - Path=/api/reportes/**
 
-        - id: cuentas-route
-          uri: lb://msvc-usuarios
-          predicates:
-            - Path=/api/cuentas/**
-
-        # Flota
-        - id: monopatines-route
-          uri: lb://msvc-flota
-          predicates:
-            - Path=/api/monopatines/**
-
-        - id: paradas-route
-          uri: lb://msvc-flota
-          predicates:
-            - Path=/api/paradas/**
-
-        # Facturación
-        - id: facturacion-route
-          uri: lb://msvc-facturacion
-          predicates:
-            - Path=/api/facturacion/**
-
-        - id: transacciones-route
-          uri: lb://msvc-facturacion
-          predicates:
-            - Path=/api/transacciones/**
-
-        # Tarifas
-        - id: tarifas-route
-          uri: lb://msvc-tarifas
-          predicates:
-            - Path=/api/tarifas/**
-
-        # Viajes
-        - id: viajes-route
-          uri: lb://msvc-viajes
-          predicates:
-            - Path=/api/viajes/**
-
-        - id: pausas-route
-          uri: lb://msvc-viajes
-          predicates:
-            - Path=/api/pausas/**
-
-        # Reportes
-        - id: reportes-route
-          uri: lb://msvc-reportes
-          predicates:
-            - Path=/api/reportes/**
-management:
-  endpoints:
-    web:
-      exposure:
-        include: "*"
+logging:
+  level:
+    org.springframework.cloud.gateway: DEBUG
 
 eureka:
   client:
-    serviceUrl:
-      defaultZone: http://localhost:8761/eureka/
-    registerWithEureka: true
-    fetchRegistry: true
+    fetch-registry: true
+    register-with-eureka: true
+    service-url:
+      default-zone: http://localhost:8761/eureka
   instance:
-    prefer-ip-address: true
-    instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
+    hostname: localhost
 
 jwt:
   secret: miClaveSecretaSuperSeguraDeAlMenos256Bits1234567890
