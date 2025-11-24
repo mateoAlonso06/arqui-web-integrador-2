@@ -33,6 +33,10 @@ spring:
             uri: lb://msvc-facturacion
             predicates:
               - Path=/api/transacciones/**
+          - id: mercado-pago-route
+            uri: lb://msvc-facturacion
+            predicates:
+              - Path=/api/mercado-pago/cobrar
           - id: tarifas-route
             uri: lb://msvc-tarifas
             predicates:
