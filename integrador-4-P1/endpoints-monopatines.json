@@ -1,0 +1,438 @@
+{
+	"info": {
+		"_postman_id": "8f729d52-c2e6-4d51-a8c9-857b3ad42a69",
+		"name": "Sistema monopatines",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "39661247"
+	},
+	"item": [
+		{
+			"name": "Tarifas",
+			"item": [
+				{
+					"name": "crear tarifa",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJhbGciOiJIUzM4NCJ9.eyJyb2xlIjoiQURNSU4iLCJzdWIiOiJzZXJnaW9AZ21haWwuY29tIiwiaWF0IjoxNzYzOTQzNjUwLCJleHAiOjE3NjM5NDcyNTB9.B5BKmeE65hl2qGRKn26tadf3nUjSewFOZXCCn_EOu8rRVLJwDAUkxXIIjUzbTcgJ"
+							}
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"tipoTarifa\": \"BASICA\",\n    \"valorPorMinuto\": 100,\n    \"fechaVigencia\": \"2030-02-10T14:30:00\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "localhost:8080/api/tarifas"
+					},
+					"response": []
+				},
+				{
+					"name": "obtener montos de tarifas",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJhbGciOiJIUzM4NCJ9.eyJyb2xlIjoiQURNSU4iLCJzdWIiOiJzZXJnaW9AZ21haWwuY29tIiwiaWF0IjoxNzYzOTQzNjUwLCJleHAiOjE3NjM5NDcyNTB9.B5BKmeE65hl2qGRKn26tadf3nUjSewFOZXCCn_EOu8rRVLJwDAUkxXIIjUzbTcgJ"
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"url": "localhost:8080/api/tarifas/montos"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Usuarios/cuentas",
+			"item": [
+				{
+					"name": "crear usuario",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nombre\": \"Franco\",\n    \"apellido\": \"Colapinto\",\n    \"celular\": \"2266526778\",\n    \"password\": \"franco2025\",\n    \"email\": \"colapa@gmail.com\",\n    \"role\": \"USER\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "localhost:8080/api/usuarios"
+					},
+					"response": []
+				},
+				{
+					"name": "crear cuenta",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"idCuentaMercadoPago\": 200,\n    \"tipoCuenta\": \"BASICA\" // PREMIUM, BASICA\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "localhost:8080/api/cuentas"
+					},
+					"response": []
+				},
+				{
+					"name": "consumo personal servicio",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJhbGciOiJIUzM4NCJ9.eyJyb2xlIjoiQURNSU4iLCJzdWIiOiJzZXJnaW9AZ21haWwuY29tIiwiaWF0IjoxNzYzOTk5NzgzLCJleHAiOjE3NjQwMDMzODN9.BuoOnJDavUeWIZTAgnfvksFzeUhMTwzD9uKaKgso2evtFTlg-JTu6fcAagE5Efpw"
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"monto\": 10000\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/api/usuarios/1/consumo-servicio?fechaInicio=2020-02-10T14:30:00&fechaFin=2035-02-10T14:30:00",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"usuarios",
+								"1",
+								"consumo-servicio"
+							],
+							"query": [
+								{
+									"key": "fechaInicio",
+									"value": "2020-02-10T14:30:00"
+								},
+								{
+									"key": "fechaFin",
+									"value": "2035-02-10T14:30:00"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "deshabilitar cuenta",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJhbGciOiJIUzM4NCJ9.eyJyb2xlIjoiVVNFUiIsInN1YiI6InNlcmdpb0BnbWFpbC5jb20iLCJpYXQiOjE3NjQwMDYzMDcsImV4cCI6MTc2NDAwOTkwN30.tDas0pr8MYVyp4BGrKR19KjM4RMUZLSbpyPVgvbJVwARY7NBu_jwTKrA6uUvaMFj"
+							}
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "localhost:8080/api/cuentas/4/administraccion/1/deshabilitar"
+					},
+					"response": []
+				},
+				{
+					"name": "habilitar cuenta",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJhbGciOiJIUzM4NCJ9.eyJyb2xlIjoiVVNFUiIsInN1YiI6InNlcmdpb0BnbWFpbC5jb20iLCJpYXQiOjE3NjQwMDYzMDcsImV4cCI6MTc2NDAwOTkwN30.tDas0pr8MYVyp4BGrKR19KjM4RMUZLSbpyPVgvbJVwARY7NBu_jwTKrA6uUvaMFj"
+							}
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "localhost:8080/api/cuentas/4/administraccion/1/habilitar"
+					},
+					"response": []
+				},
+				{
+					"name": "login",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJhbGciOiJIUzM4NCJ9.eyJyb2xlIjoiQURNSU4iLCJzdWIiOiJzZXJnaW9AZ21haWwuY29tIiwiaWF0IjoxNzY0MDA1MTgxLCJleHAiOjE3NjQwMDg3ODF9.UnAhVYbIu35lbTONMa2xD0oMalRjbxd97MSZOMwOlgFxWiN8EFVMiCw_8StxjKAX"
+							}
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"sergio@gmail.com\",\n    \"password\": \"sergio_123\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "localhost:8080/api/auth/login"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Chatbot",
+			"item": [
+				{
+					"name": "cuanto consumi el servicio este mes",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJhbGciOiJIUzM4NCJ9.eyJyb2xlIjoiQURNSU4iLCJzdWIiOiJzZXJnaW9AZ21haWwuY29tIiwiaWF0IjoxNzY0MDE1NzIwLCJleHAiOjE3NjQwMTkzMjB9.AqRe1kq3gljrTs9N_UB8gGQlSLQGxtZ04vG3vIEXBE4LZ4GUfKBS_YUrxdBiA2AB"
+							}
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"pregunta\": \"¿Cuántos kilómetros recorrí este mes?\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "localhost:8080/api/chatbot/usuario/1/consultar"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Reportes",
+			"item": [
+				{
+					"name": "Reporte uso monopatines general",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJhbGciOiJIUzM4NCJ9.eyJyb2xlIjoiQURNSU4iLCJzdWIiOiJzZXJnaW9AZ21haWwuY29tIiwiaWF0IjoxNzY0MDA0MTQ3LCJleHAiOjE3NjQwMDc3NDd9.UR0ufxSJfQQX-zAFEYVUqcDnY_7oDlB4MZo9Vw5x7Xw_VMNoCHcebugAsKMTyozx"
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/api/reportes/monopatines/admin/1?cantidadViajes=1&anio=2025",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"reportes",
+								"monopatines",
+								"admin",
+								"1"
+							],
+							"query": [
+								{
+									"key": "cantidadViajes",
+									"value": "1"
+								},
+								{
+									"key": "anio",
+									"value": "2025"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "total facturado en rango de fechas",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJhbGciOiJIUzM4NCJ9.eyJyb2xlIjoiVVNFUiIsInN1YiI6InNlcmdpb0BnbWFpbC5jb20iLCJpYXQiOjE3NjQwMDYzMDcsImV4cCI6MTc2NDAwOTkwN30.tDas0pr8MYVyp4BGrKR19KjM4RMUZLSbpyPVgvbJVwARY7NBu_jwTKrA6uUvaMFj"
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/reportes/facturacion/rango-meses/admin/1?fechaInicio=2001-09-11T09:46:00&fechaFin=2030-09-11T09:46:00",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"reportes",
+								"facturacion",
+								"rango-meses",
+								"admin",
+								"1"
+							],
+							"query": [
+								{
+									"key": "fechaInicio",
+									"value": "2001-09-11T09:46:00"
+								},
+								{
+									"key": "fechaFin",
+									"value": "2030-09-11T09:46:00"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "obtener top usuarios que usaron el servicio",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJhbGciOiJIUzM4NCJ9.eyJyb2xlIjoiQURNSU4iLCJzdWIiOiJzZXJnaW9AZ21haWwuY29tIiwiaWF0IjoxNzY0MDA1MTgxLCJleHAiOjE3NjQwMDg3ODF9.UnAhVYbIu35lbTONMa2xD0oMalRjbxd97MSZOMwOlgFxWiN8EFVMiCw_8StxjKAX"
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/reportes/usuarios/top-usuarios/admin/1?fechaInicio=2000-09-11T09:46:00&fechaFin=2030-09-11T09:46:00&tipoCuenta=BASICA",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"reportes",
+								"usuarios",
+								"top-usuarios",
+								"admin",
+								"1"
+							],
+							"query": [
+								{
+									"key": "fechaInicio",
+									"value": "2000-09-11T09:46:00"
+								},
+								{
+									"key": "fechaFin",
+									"value": "2030-09-11T09:46:00"
+								},
+								{
+									"key": "tipoCuenta",
+									"value": "BASICA"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "mock cobro mercado pago",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJhbGciOiJIUzM4NCJ9.eyJyb2xlIjoiQURNSU4iLCJzdWIiOiJzZXJnaW9AZ21haWwuY29tIiwiaWF0IjoxNzY0MDE1NzIwLCJleHAiOjE3NjQwMTkzMjB9.AqRe1kq3gljrTs9N_UB8gGQlSLQGxtZ04vG3vIEXBE4LZ4GUfKBS_YUrxdBiA2AB"
+							}
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"monto\": 10000,\n    \"descripcion\": \"Carga de saldo para monopatines\",\n    \"metodo_pago\": \"visa\",\n    \"id_cuenta_origen\": 1234\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "localhost:8080/api/mercado-pago/cobrar"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Monopatines/Paradas",
+			"item": [
+				{
+					"name": "listar paradas",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJhbGciOiJIUzM4NCJ9.eyJyb2xlIjoiVVNFUiIsInN1YiI6InNlcmdpb0BnbWFpbC5jb20iLCJpYXQiOjE3NjQwMDYzMDcsImV4cCI6MTc2NDAwOTkwN30.tDas0pr8MYVyp4BGrKR19KjM4RMUZLSbpyPVgvbJVwARY7NBu_jwTKrA6uUvaMFj"
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"idMonopatin\": \"69137f6fde3a224258a9d6b8\",\n    \"idParada\": \"69137f05de3a224258a9d6b5\",\n    \"idCuenta\": 1,\n    \"idUsuario\": 1,\n    \"kmRecorridos\": 100\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "localhost:8080/api/paradas"
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
