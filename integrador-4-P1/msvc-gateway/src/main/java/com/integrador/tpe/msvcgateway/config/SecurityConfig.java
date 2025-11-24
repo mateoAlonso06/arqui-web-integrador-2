@@ -36,18 +36,18 @@ public class SecurityConfig {
                         // Solo rol ADMIN para todos estos métodos y rutas
                         .requestMatchers(
                                 "/api/reportes/**",
-                                "/api/tarifas/{id}/admin/{idAdmin}",
-                                "/api/monopatines/administracion/{idAdmin}/reporte-uso",
+                                "/api/tarifas/{id}/admin/{idAdmin}", //p
+                                "/api/usuarios/monopatines/administracion/{idAdmin}/reporte-uso",
                                 "/api/cuentas/{id}/administraccion/{idAdmin}/habilitar",
                                 "/api/cuentas/{id}/administraccion/{idAdmin}/deshabilitar"
                         ).hasRole("ADMIN")
 
                         // Solo el POST de /api/tarifas requiere rol ADMIN
-                        .requestMatchers(HttpMethod.POST, "/api/tarifas").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/api/tarifas").hasRole("ADMIN") //p
 
                         // El resto de métodos en /api/tarifas (GET, PUT, etc.) públicos o
                         // si preferís solo autenticados:
-                        .requestMatchers("/api/tarifas").permitAll()
+                        .requestMatchers("/api/tarifas").permitAll()//p
 
                         // Todos los demás requieren autenticación
                         .anyRequest().authenticated()

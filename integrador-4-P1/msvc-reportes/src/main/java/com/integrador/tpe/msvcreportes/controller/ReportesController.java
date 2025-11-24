@@ -6,9 +6,11 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -24,8 +26,10 @@ public class ReportesController {
     }
 
     @GetMapping("/facturacion/rango-meses/admin/{idAdmin}") // INCISO D
-    public ResponseEntity<ReporteFacturacion> obtenerTotalFacturadoEnRangoDeMeses(@ModelAttribute @Valid TransaccionFiltroDTO transaccionFiltroDTO, @PathVariable Long idAdmin) {
-        ReporteFacturacion resultado = reportesService.obtenerTotalFacturadoEnRangoDeMeses(transaccionFiltroDTO, idAdmin);
+    public ResponseEntity<ReporteFacturacion> obtenerTotalFacturadoEnRangoDeMeses(@RequestParam LocalDateTime fechaInicio,
+                                                                                  @RequestParam LocalDateTime fechaFin,
+                                                                                  @PathVariable Long idAdmin) {
+        ReporteFacturacion resultado = reportesService.obtenerTotalFacturadoEnRangoDeMeses(new TransaccionFiltroDTO(fechaInicio, fechaFin), idAdmin);
         return ResponseEntity.ok(resultado);
     }
 

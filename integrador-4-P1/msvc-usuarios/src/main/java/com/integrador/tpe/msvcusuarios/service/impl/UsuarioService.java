@@ -10,7 +10,9 @@ import com.integrador.tpe.msvcusuarios.dto.response.ReporteConsumoPersonalServic
 import com.integrador.tpe.msvcusuarios.dto.response.ReporteConsumoServicioCompleto;
 import com.integrador.tpe.msvcusuarios.dto.response.ReporteUsoMonopatin;
 import com.integrador.tpe.msvcusuarios.dto.response.UsuarioResponseDTO;
+import com.integrador.tpe.msvcusuarios.entity.Cuenta;
 import com.integrador.tpe.msvcusuarios.entity.Role;
+import com.integrador.tpe.msvcusuarios.entity.TipoCuenta;
 import com.integrador.tpe.msvcusuarios.entity.Usuario;
 import com.integrador.tpe.msvcusuarios.exception.CredentialsInvalidException;
 import com.integrador.tpe.msvcusuarios.exception.UsuarioNotFoundException;
@@ -45,10 +47,16 @@ public class UsuarioService implements IUsuarioService {
         if (!passwordEncoder.matches(loginRequestDTO.password(), usuario.getPassword()))
             throw new CredentialsInvalidException("Credenciales inválidas para el email: " + loginRequestDTO.email());
 
+        TipoCuenta tipoCuenta = usuario.getCuentas().stream()
+                .findFirst()
+                .map(Cuenta::getTipoCuenta)
+                .orElse(null);
+
         return new UsuarioResponseValidated(
                 usuario.getId(),
                 usuario.getEmail(),
-                usuario.getRole()
+                usuario.getRole(),
+                tipoCuenta
         );
     }
 

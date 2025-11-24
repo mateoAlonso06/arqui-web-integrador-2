@@ -18,6 +18,7 @@
           <entry name="$MAVEN_REPOSITORY$/org/mapstruct/mapstruct-processor/1.6.3/mapstruct-processor-1.6.3.jar" />
         </processorPath>
         <module name="msvc-viajes" />
+        <module name="springboot-ia-agent" />
         <module name="msvc-facturacion" />
         <module name="msvc-gateway" />
         <module name="msvc-eureka" />
@@ -29,6 +30,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="msvc-groq" target="21" />
       <module name="msvc-mantenimiento" target="21" />
     </bytecodeTargetLevel>
   </component>
@@ -45,6 +47,7 @@
       <module name="msvc-tarifas" options="-parameters" />
       <module name="msvc-usuarios" options="-parameters" />
       <module name="msvc-viajes" options="-parameters" />
+      <module name="springboot-ia-agent" options="-parameters" />
       <module name="tpe-monopatines" options="-parameters" />
     </option>
   </component>

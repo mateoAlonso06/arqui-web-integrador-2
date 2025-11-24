@@ -3,17 +3,12 @@ package com.integrador.tpe.msvcfacturacion.controller;
 import com.integrador.tpe.msvcfacturacion.dto.response.TransaccionResponseDTO;
 import com.integrador.tpe.msvcfacturacion.dto.utils.TransaccionFiltroDTO;
 import com.integrador.tpe.msvcfacturacion.service.ITransaccionService;
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
-
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -36,8 +31,8 @@ public class TransaccionController {
     }
 
     @GetMapping("/facturado")
-    public ResponseEntity<List<TransaccionResponseDTO>> getAllTransacciones(@ModelAttribute TransaccionFiltroDTO transaccionFiltroDTO) {
-        List<TransaccionResponseDTO> transacciones = transaccionService.getTransacciones(transaccionFiltroDTO);
+    public ResponseEntity<List<TransaccionResponseDTO>> getAllTransacciones(@RequestParam LocalDateTime fechaInicio, @RequestParam LocalDateTime fechaFin) {
+        List<TransaccionResponseDTO> transacciones = transaccionService.getTransacciones(new TransaccionFiltroDTO(fechaInicio, fechaFin));
         return ResponseEntity.ok().body(transacciones);
     }
 }
