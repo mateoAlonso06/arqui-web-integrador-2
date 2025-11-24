@@ -86,13 +86,13 @@ public class ViajeController {
         return ResponseEntity.ok().body(usuarios);
     }
 
-    @GetMapping("/monopatines/uso/reporte") // Lo usa usuarios
+    @GetMapping("/monopatines/uso/reporte") // Lo usa usuarios // inciso A -> lo consume groq
     public ResponseEntity<List<ReporteUsoMonopatines>> generarReporteUsoMonopatines(@RequestParam boolean incluyePausa) {
         List<ReporteUsoMonopatines> reporte = viajeService.generarReporteUsoMonopatines(incluyePausa);
         return ResponseEntity.ok(reporte);
     }
 
-    @GetMapping("/servicios/consumo/{idUsuario}/reporte") // Lo usa usuarios
+    @GetMapping("/servicios/consumo/{idUsuario}/reporte") // Lo usa usuarios // inciso H
     public ResponseEntity<ReporteConsumoPersonalServicio> generarReporteConsumoPersonalServicio(@PathVariable @NotNull @Positive Long idUsuario, @ModelAttribute @Valid FechasFiltroDTO fechasFiltro) {
         ReporteConsumoPersonalServicio reporte = viajeService.generarReporteConsumoPersonalServicio(idUsuario, fechasFiltro.fechaInicio(), fechasFiltro.fechaFin());
         return ResponseEntity.ok().body(reporte);

@@ -7,6 +7,7 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="msvc-groq" />
       </profile>
       <profile name="Annotation profile for tpe-monopatines" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
@@ -38,6 +39,7 @@
       <module name="msvc-facturacion" options="-parameters" />
       <module name="msvc-flota" options="-parameters" />
       <module name="msvc-gateway" options="-parameters" />
+      <module name="msvc-groq" options="-parameters" />
       <module name="msvc-mantenimiento" options="-parameters" />
       <module name="msvc-reportes" options="-parameters" />
       <module name="msvc-tarifas" options="-parameters" />

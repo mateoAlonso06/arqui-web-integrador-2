@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -15,7 +15,7 @@ public class ReporteConsumoPersonalServicio {
     private Long idUsuario;
     private Long cantidadHorasServicio;
     private Double kmRecorridos;
-    private LocalDate periodoInicio;
-    private LocalDate periodoFin;
+    private LocalDateTime periodoInicio;
+    private LocalDateTime periodoFin;
     private InfoCuentasReporte cuentasAsociadas;
 }

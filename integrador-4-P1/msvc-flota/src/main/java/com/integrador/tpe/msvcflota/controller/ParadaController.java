@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -24,8 +25,8 @@ public class ParadaController {
     private final IParadaService paradaService;
 
     @GetMapping("/{idParada}/monopatines")
-    public ResponseEntity<Page<MonopatinResponseDTO>> getMonopatinesEnParada(@PathVariable @NotBlank String idParada, Pageable pageable) {
-        Page<MonopatinResponseDTO> monopatines = paradaService.getMonopatinesEnParada(idParada, pageable);
+    public ResponseEntity<List<MonopatinResponseDTO>> getMonopatinesEnParada(@PathVariable @NotBlank String idParada) {
+        List<MonopatinResponseDTO> monopatines = paradaService.getMonopatinesEnParada(idParada);
         return ResponseEntity.ok(monopatines);
     }
 

@@ -50,9 +50,6 @@ public class Viaje {
     @Column(name = "tiempo_pausa")
     private Double tiempoPausa = 0.0;
 
-    @Column(name = "tiempo_viaje")
-    private Double tiempoViaje = 0.0;
-
     @PreUpdate
     private void calcularTiempos() {
         // tiempo de pausa
@@ -64,12 +61,6 @@ public class Viaje {
                 totalPausa += Duration.between(pausa.getFechaInicio(), pausa.getFechaFin()).toMinutes();
                 tiempoPausa = totalPausa;
             }
-        }
-        // tiempo de viaje
-        if (fechaInicio != null && fechaFin == null) {
-            LocalDateTime fechaActual = LocalDateTime.now();
-            double tiempoTotal = Duration.between(fechaInicio, fechaActual).toMinutes();
-            tiempoViaje = tiempoTotal - tiempoPausa;
         }
     }
 
@@ -83,5 +74,12 @@ public class Viaje {
     @Override
     public int hashCode() {
         return Objects.hashCode(getId());
+    }
+
+    public double calcularTiempoViaje() {
+        if (fechaInicio != null && fechaFin != null) {
+            return (double) Duration.between(fechaInicio, fechaFin).toMinutes();
+        }
+        return 0.0;
     }
 }

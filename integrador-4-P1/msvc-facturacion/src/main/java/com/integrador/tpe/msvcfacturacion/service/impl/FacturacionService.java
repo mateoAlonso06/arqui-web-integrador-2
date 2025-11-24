@@ -77,15 +77,17 @@ public class FacturacionService implements IFacturacionService {
             );
         }
         if (!usuarioPremium) {
-            montoACobrar = montoTarifas.getTarifaBase().multiply(duracionSinPausa);
+            montoACobrar = montoACobrar.add(
+                    montoTarifas.getTarifaBase().multiply(duracionSinPausa)
+            );
         } else {
             if (informacionViaje.getKmHechosPorElUsuario() > 100) {
-                montoACobrar = montoTarifas.getTarifaBase().multiply(duracionSinPausa)
-                        .divide(BigDecimal.valueOf(2), BigDecimal.ROUND_HALF_UP);
+                montoACobrar = montoACobrar.add(
+                        montoTarifas.getTarifaBase().multiply(duracionSinPausa)
+                                .divide(BigDecimal.valueOf(2), BigDecimal.ROUND_HALF_UP)
+                );
             }
         }
-
-//        if : si queda salgo negativo?
 
         cuentaCorriente.setSaldoActual(cuentaCorriente.getSaldoActual().subtract(montoACobrar));
 

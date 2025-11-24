@@ -34,6 +34,7 @@
         <module>msvc-eureka</module>
         <module>msvc-config</module>
         <module>msvc-gateway</module>
+        <module>msvc-groq</module>
     </modules>
 
     <dependencies>

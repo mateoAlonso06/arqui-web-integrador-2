@@ -5,6 +5,7 @@ import com.integrador.tpe.msvcusuarios.dto.request.FechasFiltroDTO;
 import com.integrador.tpe.msvcusuarios.dto.request.LoginRequestDTO;
 import com.integrador.tpe.msvcusuarios.dto.request.UsuarioRequestDTO;
 import com.integrador.tpe.msvcusuarios.dto.request.UsuarioUpdateDTO;
+import com.integrador.tpe.msvcusuarios.dto.response.ReporteConsumoPersonalServicio;
 import com.integrador.tpe.msvcusuarios.dto.response.ReporteConsumoServicioCompleto;
 import com.integrador.tpe.msvcusuarios.dto.response.ReporteUsoMonopatin;
 import com.integrador.tpe.msvcusuarios.dto.response.UsuarioResponseDTO;
@@ -16,12 +17,14 @@ import lombok.RequiredArgsConstructor;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -102,12 +105,29 @@ public class UsuarioController {
     @GetMapping("/{id}/consumo-servicio")
     public ResponseEntity<ReporteConsumoServicioCompleto> obtenerReporteConsumoPersonal(
             @PathVariable Long id,
-            @RequestBody @Valid FechasFiltroDTO fechasFiltroDTO,
+            @RequestParam("fechaInicio") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime fechaInicio,
+            @RequestParam("fechaFin") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime fechaFin,
             @RequestParam(required = false, defaultValue = "false") boolean incluyeRelaciones) {
+        FechasFiltroDTO fechasFiltroDTO = new FechasFiltroDTO(fechaInicio, fechaFin);
         ReporteConsumoServicioCompleto reporte = usuarioService.obtenerReporteConsumo(
                 id,
                 fechasFiltroDTO,
                 incluyeRelaciones);
         return ResponseEntity.ok(reporte);
     }
+
+    @GetMapping("/{id}/reporte-chat/consumo-servicio")
+    public ResponseEntity<ReporteConsumoPersonalServicio> obtenerReporteConsumoPersonaIndividual(
+            @PathVariable Long id,
+            @RequestParam("fechaInicio") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime fechaInicio,
+            @RequestParam("fechaFin") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime fechaFin,
+            @RequestParam(required = false, defaultValue = "false") boolean incluyeRelaciones) {
+        FechasFiltroDTO fechasFiltroDTO = new FechasFiltroDTO(fechaInicio, fechaFin);
+        ReporteConsumoPersonalServicio reporte = usuarioService.obtenerReporteConsumoIndividual(
+                id,
+                fechasFiltroDTO,
+                incluyeRelaciones);
+        return ResponseEntity.ok(reporte);
+    }
 }
+

@@ -78,8 +78,8 @@ public class TarifaService implements ITarifaService {
     @Override
     @Transactional
     public TarifaResponseDTO updateTarifa(Long id, TarifaRequestDTO tarifaRequestDTO, Long idAdmin) {
-        if (!isAdmin(idAdmin))
-            throw new RuntimeException("Usuario no autorizado para realizar esta acción.");
+//        if (!isAdmin(idAdmin))
+//            throw new RuntimeException("Usuario no autorizado para realizar esta acción.");
 
         Tarifa existingTarifa = tarifaRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Tarifa not found with id: " + id));

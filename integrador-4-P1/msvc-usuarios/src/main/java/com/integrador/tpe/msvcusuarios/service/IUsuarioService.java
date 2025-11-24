@@ -5,6 +5,7 @@ import com.integrador.tpe.msvcusuarios.dto.request.FechasFiltroDTO;
 import com.integrador.tpe.msvcusuarios.dto.request.LoginRequestDTO;
 import com.integrador.tpe.msvcusuarios.dto.request.UsuarioRequestDTO;
 import com.integrador.tpe.msvcusuarios.dto.request.UsuarioUpdateDTO;
+import com.integrador.tpe.msvcusuarios.dto.response.ReporteConsumoPersonalServicio;
 import com.integrador.tpe.msvcusuarios.dto.response.ReporteConsumoServicioCompleto;
 import com.integrador.tpe.msvcusuarios.dto.response.ReporteUsoMonopatin;
 import com.integrador.tpe.msvcusuarios.dto.response.UsuarioResponseDTO;
@@ -33,6 +34,8 @@ public interface IUsuarioService {
     boolean isAdmin(Long idUsuario);
 
     UsuarioResponseValidated validateCredentials(LoginRequestDTO loginRequestDTO);
+
+    ReporteConsumoPersonalServicio obtenerReporteConsumoIndividual(Long idUsuario, FechasFiltroDTO fechasFiltroDTO, boolean incluyeRelaciones);
 
     ReporteConsumoServicioCompleto obtenerReporteConsumo(Long idUsuario, FechasFiltroDTO fechasFiltroDTO, boolean incluyeRelaciones);
 }

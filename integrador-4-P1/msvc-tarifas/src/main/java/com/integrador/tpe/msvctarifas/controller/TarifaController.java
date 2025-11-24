@@ -21,7 +21,7 @@ import java.net.URI;
 @RequiredArgsConstructor
 @Validated
 @RequestMapping("api/tarifas")
-public class TarifaController {
+public class    TarifaController {
     private final ITarifaService tarifaService;
 
     @GetMapping("/montos")

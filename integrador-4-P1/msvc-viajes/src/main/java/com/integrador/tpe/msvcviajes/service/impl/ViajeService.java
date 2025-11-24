@@ -102,18 +102,17 @@ public class ViajeService implements IViajeService {
         Viaje viaje = viajeRepository.findById(idViaje)
                 .orElseThrow(() -> new ViajeNotFoundException("Viaje con id " + idViaje + " no encontrado."));
 
-        ParadaResponseDTO paradaFin = paradaClient.getParadaById(idParada);
-
-        monopatinClient.actualizarUbicacionMonopatin(idMonopatin, paradaFin.getUbicacionGps());
-
-        MonopatinResponseDTO monopatin = monopatinClient.getMonopatinById(idMonopatin);
-
-
         if (viajeRequestDTO.getKmRecorridos() == null)
             throw new IllegalStateException("Los kilómetros recorridos no pueden ser nulos al finalizar el viaje.");
 
         if (viaje.getFechaFin() != null)
             throw new IllegalStateException("El viaje con id " + idViaje + " ya ha sido finalizado.");
+
+        ParadaResponseDTO paradaFin = paradaClient.getParadaById(idParada);
+
+        monopatinClient.actualizarUbicacionMonopatin(idMonopatin, paradaFin.getUbicacionGps());
+
+        MonopatinResponseDTO monopatin = monopatinClient.getMonopatinById(idMonopatin);
 
         UbicacionGPS ubicacionMonopatin = monopatin.getUbicacionGps();
         UbicacionGPS ubicacionParadaFin = paradaFin.getUbicacionGps();
@@ -124,7 +123,10 @@ public class ViajeService implements IViajeService {
         // Establecemos fin del viaje
         viaje.setFechaFin(LocalDateTime.now());
         viaje.setKmRecorridos(viajeRequestDTO.getKmRecorridos());
-        viajeRepository.save(viaje);
+
+        if (viajeRequestDTO.getKmRecorridos() != null) {
+            viajeRepository.save(viaje);
+        }
 
         List<Viaje> viajes = viajeRepository.findAllByIdUsuario(idUsuario);
 
@@ -138,6 +140,7 @@ public class ViajeService implements IViajeService {
         for (Pausa p : viaje.getPausas())
             tiempoDePausa += Duration.between(p.getFechaInicio(), p.getFechaFin()).toMinutes();
 
+        // Actualizamos estado y km del monopatín
         monopatinClient.actualizarRecorridoMonopatin(idMonopatin, viajeRequestDTO.getKmRecorridos());
         monopatinClient.actualizarEstadoMonopatin(idMonopatin, "LIBRE");
 
@@ -220,6 +223,14 @@ public class ViajeService implements IViajeService {
     @Transactional(readOnly = true) // INCISO H
     public ReporteConsumoPersonalServicio generarReporteConsumoPersonalServicio(Long idUsuario, LocalDateTime
             fechaInicio, LocalDateTime fechaFin) {
-        return viajeRepository.generarReporteConsumoPersonalServicio(idUsuario, fechaInicio, fechaFin);
+        List<Viaje> reportes = viajeRepository.generarReporteConsumoPersonalServicio(idUsuario, fechaInicio, fechaFin);
+        double totalTiempoViajes = 0.0;
+        double totalKmRecorridos = 0.0;
+
+        for (Viaje v : reportes) {
+            totalTiempoViajes += v.calcularTiempoViaje();
+            totalKmRecorridos += v.getKmRecorridos();
+        }
+        return new ReporteConsumoPersonalServicio(totalTiempoViajes, totalKmRecorridos);
     }
 }

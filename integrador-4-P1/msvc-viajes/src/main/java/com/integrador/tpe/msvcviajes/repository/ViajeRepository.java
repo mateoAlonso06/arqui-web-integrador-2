@@ -77,14 +77,10 @@ public interface ViajeRepository extends JpaRepository<Viaje, Long> {
     List<ReporteUsoMonopatines> generarReporteUsoMonopatinesSinPausa();
 
     @Query("""
-                SELECT new com.integrador.tpe.msvcviajes.dto.interservice.response.ReporteConsumoPersonalServicio(
-                    SUM(v.tiempoViaje),
-                    SUM(v.kmRecorridos)
-                )
-                FROM Viaje v 
+                SELECT v
+                FROM Viaje v
                 WHERE v.idUsuario = :idUsuario
                 AND v.fechaInicio BETWEEN :fechaInicio AND :fechaFin
-                GROUP BY v.idUsuario
             """)
-    ReporteConsumoPersonalServicio generarReporteConsumoPersonalServicio(Long idUsuario, LocalDateTime fechaInicio, LocalDateTime fechaFin);
+    List<Viaje> generarReporteConsumoPersonalServicio(Long idUsuario, LocalDateTime fechaInicio, LocalDateTime fechaFin);
 }

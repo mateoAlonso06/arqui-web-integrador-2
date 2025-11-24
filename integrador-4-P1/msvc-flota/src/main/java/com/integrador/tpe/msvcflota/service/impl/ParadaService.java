@@ -20,6 +20,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class ParadaService implements IParadaService {
@@ -30,14 +32,14 @@ public class ParadaService implements IParadaService {
 
     @Override
     @Transactional(readOnly = true)
-    public Page<MonopatinResponseDTO> getMonopatinesEnParada(String idParada, Pageable pageable) {
+    public List<MonopatinResponseDTO> getMonopatinesEnParada(String idParada) {
         ObjectId objectId = new ObjectId(idParada);
         Parada parada = paradaRepository.findById(objectId)
                 .orElseThrow(() -> new ParadaNotFoundException("No existe parada con ID: " + idParada));
 
-        Page<Monopatin> monopatines = monopatinRepository.findAllByUbicacionGpsAndEstado(parada.getUbicacionGps(), EstadoMonopatin.LIBRE, pageable);
+        List<Monopatin> monopatines = monopatinRepository.findAllByUbicacionGpsAndEstado(parada.getUbicacionGps(), EstadoMonopatin.LIBRE);
 
-        return monopatines.map(monopatinMapper::toResponseDTO);
+        return monopatines.stream().map(monopatinMapper::toResponseDTO).toList();
     }
 
     @Override
@@ -75,7 +77,7 @@ public class ParadaService implements IParadaService {
                 .orElseThrow(() -> new ParadaNotFoundException("No existe parada con ID: " + id));
 
         // No puede haber monopatines en esta parada
-        if (this.getMonopatinesEnParada(id, Pageable.unpaged()).hasContent())
+        if (!this.getMonopatinesEnParada(id).isEmpty())
             throw new IllegalStateException("No se puede eliminar la parada porque hay monopatines asignados a ella.");
 
         paradaRepository.delete(parada);

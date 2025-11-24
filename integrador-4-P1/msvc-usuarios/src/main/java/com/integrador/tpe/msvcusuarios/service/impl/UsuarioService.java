@@ -6,7 +6,10 @@ import com.integrador.tpe.msvcusuarios.dto.request.FechasFiltroDTO;
 import com.integrador.tpe.msvcusuarios.dto.request.LoginRequestDTO;
 import com.integrador.tpe.msvcusuarios.dto.request.UsuarioRequestDTO;
 import com.integrador.tpe.msvcusuarios.dto.request.UsuarioUpdateDTO;
-import com.integrador.tpe.msvcusuarios.dto.response.*;
+import com.integrador.tpe.msvcusuarios.dto.response.ReporteConsumoPersonalServicio;
+import com.integrador.tpe.msvcusuarios.dto.response.ReporteConsumoServicioCompleto;
+import com.integrador.tpe.msvcusuarios.dto.response.ReporteUsoMonopatin;
+import com.integrador.tpe.msvcusuarios.dto.response.UsuarioResponseDTO;
 import com.integrador.tpe.msvcusuarios.entity.Role;
 import com.integrador.tpe.msvcusuarios.entity.Usuario;
 import com.integrador.tpe.msvcusuarios.exception.CredentialsInvalidException;
@@ -21,7 +24,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.security.auth.login.CredentialException;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -150,14 +152,21 @@ public class UsuarioService implements IUsuarioService {
 
     @Override
     @Transactional(readOnly = true)
-    public ReporteConsumoServicioCompleto obtenerReporteConsumo(Long idUsuario, FechasFiltroDTO fechasFiltroDTO , boolean incluyeRelaciones) {
+    public ReporteConsumoServicioCompleto obtenerReporteConsumo(Long idUsuario, FechasFiltroDTO fechasFiltroDTO, boolean incluyeRelaciones) {
         Usuario usuarioPrincipal = usuarioRepository.findById(idUsuario)
                 .orElseThrow(() -> new UsuarioNotFoundException("No existe un usuario con ID: " + idUsuario));
 
         ReporteConsumoServicioCompleto reporteCompleto = new ReporteConsumoServicioCompleto();
-        ReporteConsumoPersonalServicio consumoPersonal = viajeClient.generarReporteConsumoPersonalServicio(idUsuario, fechasFiltroDTO);
+        ReporteConsumoPersonalServicio consumoPersonal = viajeClient.generarReporteConsumoPersonalServicio(
+                idUsuario,
+                fechasFiltroDTO.fechaInicio(),
+                fechasFiltroDTO.fechaFin()
+        );
 
         consumoPersonal.setIdUsuario(idUsuario);
+        consumoPersonal.setPeriodoInicio(fechasFiltroDTO.fechaInicio());
+        consumoPersonal.setPeriodoFin(fechasFiltroDTO.fechaFin());
+
         reporteCompleto.setUsuarioPrincipal(consumoPersonal);
 
         if (!incluyeRelaciones)
@@ -169,12 +178,34 @@ public class UsuarioService implements IUsuarioService {
                 .collect(Collectors.toSet());
 
         List<ReporteConsumoPersonalServicio> consumosRelacionados = usuariosRelacionados.stream()
-                .map(u -> viajeClient.generarReporteConsumoPersonalServicio(u.getId(), fechasFiltroDTO))
+                .map(u -> viajeClient.generarReporteConsumoPersonalServicio(
+                        u.getId(),
+                        fechasFiltroDTO.fechaInicio(),
+                        fechasFiltroDTO.fechaFin()
+                ))
                 .peek(r -> r.setIdUsuario(r.getIdUsuario()))
                 .toList();
 
         reporteCompleto.setUsuariosRelacionados(consumosRelacionados);
         return reporteCompleto;
     }
-}
 
+    @Override
+    @Transactional(readOnly = true)
+    public ReporteConsumoPersonalServicio obtenerReporteConsumoIndividual(Long idUsuario, FechasFiltroDTO fechasFiltroDTO, boolean incluyeRelaciones) {
+        Usuario usuarioPrincipal = usuarioRepository.findById(idUsuario)
+                .orElseThrow(() -> new UsuarioNotFoundException("No existe un usuario con ID: " + idUsuario));
+
+        ReporteConsumoPersonalServicio consumoPersonal = viajeClient.generarReporteConsumoPersonalServicio(
+                idUsuario,
+                fechasFiltroDTO.fechaInicio(),
+                fechasFiltroDTO.fechaFin()
+        );
+
+        consumoPersonal.setIdUsuario(idUsuario);
+        consumoPersonal.setPeriodoInicio(fechasFiltroDTO.fechaInicio());
+        consumoPersonal.setPeriodoFin(fechasFiltroDTO.fechaFin());
+
+        return consumoPersonal;
+    }
+}

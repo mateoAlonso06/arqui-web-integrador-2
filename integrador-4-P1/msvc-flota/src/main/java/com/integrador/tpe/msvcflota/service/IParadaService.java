@@ -7,8 +7,10 @@ import org.bson.types.ObjectId;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.util.List;
+
 public interface IParadaService {
-    Page<MonopatinResponseDTO> getMonopatinesEnParada(String idParada, Pageable pageable);
+    List<MonopatinResponseDTO> getMonopatinesEnParada(String idParada);
 
     ParadaResponseDTO addParada(ParadaRequestDTO paradaRequestDTO);
 
